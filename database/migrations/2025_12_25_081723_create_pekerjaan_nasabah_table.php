@@ -9,15 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('pekerjaan_nasabah', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique(); 
-            $table->string('email')->unique();
-            $table->string('password'); 
-            $table->enum('role', ['Admin', 'Funding', 'Nasabah'])->default('Nasabah'); 
-            $table->rememberToken();
+            $table->foreignId('nasabah_id')->constrained('nasabah')->onDelete('cascade');
+            $table->string('area_kerja');
+            $table->string('jabatan');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('pekerjaan_nasabah');
     }
 };
