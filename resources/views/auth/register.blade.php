@@ -46,8 +46,8 @@
                 </div>
 
                 <div class="mt-8">
-                    <form action="{{ route('register') }}" method="POST" class="space-y-5">
-                        @csrf 
+                    <form action="{{ route('register.submit') }}" method="POST" class="space-y-5">
+                    @csrf
 
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">
@@ -98,7 +98,12 @@
                                 <input id="terms" name="terms" type="checkbox" required class="focus:ring-bsi-teal h-4 w-4 text-bsi-teal border-gray-300 rounded">
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="terms" class="font-medium text-gray-700">Saya menyetujui <a href="#" class="text-bsi-teal hover:underline">Syarat & Ketentuan</a>.</label>
+                                <label for="terms" class="font-medium text-bsi-teal">
+                                    Saya menyetujui 
+                                    <a href="{{ route('terms') }}" target="_blank" class="font-bold underline hover:text-bsi-dark">
+                                        Syarat & Ketentuan
+                                    </a>.
+                                </label>
                             </div>
                         </div>
 
