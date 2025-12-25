@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NasabahController; 
+use App\Http\Controllers\MonitoringController; 
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -7,50 +10,45 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Di sini adalah tempat mendaftarkan rute web untuk aplikasi.
-| Karena kamu fokus di Front-End, kita buat rute simulasi agar
-| tampilan bisa di-klik dan berpindah halaman dengan lancar.
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-// 1. Redirect Halaman Awal (/) langsung ke Halaman Login
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
-// 2. RUTE LOGIN
-Route::get('/login', function () {
-    return view('auth.login'); // Memanggil file resources/views/auth/login.blade.php
-})->name('login');
+// Rute umum 
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-// Simulasi Proses Login (POST)
-Route::post('/login', function () {
-    // Nanti logika Back-End ada di sini.
-    // Sekarang kita langsung lempar ke Dashboard seolah login sukses.
-    return redirect()->route('funding.dashboard');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // --- FITUR KHUSUS ADMIN ---
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('/admin/users', function() {
+            return "Halaman Kelola Pengguna (Hanya Admin)";
+        })->name('admin.users');
+    });
+
+    // --- FITUR PETUGAS FUNDING & ADMIN ---
+    Route::middleware('role:Admin,Funding')->group(function () {
+        Route::get('/funding/monitoring', [MonitoringController::class, 'index'])->name('funding.index');
+        Route::get('/funding/tracking', [MonitoringController::class, 'tracking'])->name('funding.tracking');
+    });
+
+    // --- FITUR NASABAH ---
+    Route::middleware('role:Nasabah')->group(function () {
+        Route::get('/pendaftaran', [NasabahController::class, 'create'])->name('nasabah.daftar');
+        Route::post('/pendaftaran', [NasabahController::class, 'store'])->name('nasabah.simpan');
+    });
 });
 
-// 3. RUTE REGISTER
-Route::get('/register', function () {
-    return view('auth.register'); // Memanggil file resources/views/auth/register.blade.php
-})->name('register');
-
-// Simulasi Proses Register (POST)
-Route::post('/register', function () {
-    return "Simulasi: Pendaftaran Berhasil! Silakan kembali ke login.";
-})->name('register.submit');
-
-// 4. RUTE SYARAT & KETENTUAN (TERMS)
-Route::get('/terms', function () {
-    return view('terms');
-})->name('terms');
-
-// 5. RUTE DASHBOARD FUNDING
-// Ini halaman tujuan setelah login berhasil
-Route::get('/funding/dashboard', function () {
-    // Jika nanti file view dashboard sudah dibuat, ganti baris bawah ini dengan:
-    // return view('funding.dashboard');
-    return "<h1 style='text-align:center; margin-top:50px; font-family:sans-serif;'>Selamat Datang di Dashboard Funding BSI!</h1><p style='text-align:center;'>File view belum dibuat. Silakan buat resources/views/funding/dashboard.blade.php</p>";
-})->name('funding.dashboard');
-
-// Catatan: Baris require auth.php dihapus dulu karena kamu mengerjakan Front-End manual
+require __DIR__.'/auth.php';

@@ -46,17 +46,27 @@
                 </div>
 
                 <div class="mt-8">
-                    <form action="{{ route('register.submit') }}" method="POST" class="space-y-5">
-                    @csrf
+                    @if ($errors->any())
+                        <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
+                            <ul class="list-disc list-inside text-sm text-red-700">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('register') }}" method="POST" class="space-y-5">
+                        @csrf
 
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">
+                            <label for="username" class="block text-sm font-medium text-gray-700">
                                 Username
                             </label>
                             <div class="mt-1">
-                                <input id="name" name="name" type="text" autocomplete="name" required 
+                                <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus autocomplete="username" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
-                                    placeholder="Contoh: Budi Santoso">
+                                    placeholder="Contoh: budisantoso">
                             </div>
                         </div>
 
@@ -65,7 +75,7 @@
                                 Email
                             </label>
                             <div class="mt-1">
-                                <input id="email" name="email" type="email" autocomplete="email" required 
+                                <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="nama@bankbsi.co.id">
                             </div>
@@ -76,7 +86,7 @@
                                 Password
                             </label>
                             <div class="mt-1">
-                                <input id="password" name="password" type="password" autocomplete="new-password" required 
+                                <input id="password" name="password" type="password" required autocomplete="new-password" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Minimal 8 karakter">
                             </div>
@@ -87,7 +97,7 @@
                                 Konfirmasi Password
                             </label>
                             <div class="mt-1">
-                                <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required 
+                                <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Ulangi password di atas">
                             </div>
@@ -100,7 +110,7 @@
                             <div class="ml-3 text-sm">
                                 <label for="terms" class="font-medium text-bsi-teal">
                                     Saya menyetujui 
-                                    <a href="{{ route('terms') }}" target="_blank" class="font-bold underline hover:text-bsi-dark">
+                                    <a href="#" class="font-bold underline hover:text-bsi-dark">
                                         Syarat & Ketentuan
                                     </a>.
                                 </label>

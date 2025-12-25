@@ -47,11 +47,17 @@
                 </div>
 
                 <div class="mt-8">
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+
                     @if ($errors->any())
                         <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
                             <div class="flex">
                                 <div class="ml-3">
-                                    <p class="text-sm text-red-700">Email atau password salah.</p>
+                                    <ul class="list-disc list-inside text-sm text-red-700">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -61,11 +67,11 @@
                         @csrf 
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">
+                            <label for="username" class="block text-sm font-medium text-gray-700">
                                 Username
                             </label>
                             <div class="mt-1">
-                                <input id="email" name="email" type="email" autocomplete="email" required 
+                                <input id="username" name="username" type="text" :value="old('username')" required autofocus autocomplete="username" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Masukkan username Anda">
                             </div>
@@ -76,7 +82,7 @@
                                 Password
                             </label>
                             <div class="mt-1">
-                                <input id="password" name="password" type="password" autocomplete="current-password" required 
+                                <input id="password" name="password" type="password" required autocomplete="current-password" 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="••••••••">
                             </div>
@@ -91,11 +97,13 @@
                                 </label>
                             </div>
                             
-                            <div class="text-sm">
-                                <a href="#" class="font-medium text-bsi-teal hover:text-bsi-dark">
-                                    Lupa password?
-                                </a>
-                            </div>
+                            @if (Route::has('password.request'))
+                                <div class="text-sm">
+                                    <a href="{{ route('password.request') }}" class="font-medium text-bsi-teal hover:text-bsi-dark">
+                                        Lupa password?
+                                    </a>
+                                </div>
+                            @endif
                         </div>
 
                         <div>
@@ -119,7 +127,7 @@
                 
                 <div class="mt-10 text-center">
                     <p class="text-xs text-gray-400">
-                        &copy; 2026 Bank Syariah Indonesia KC Diponegoro.<br>Dilindungi Undang-Undang.
+                        &copy; {{ date('Y') }} Bank Syariah Indonesia KC Diponegoro.<br>Dilindungi Undang-Undang.
                     </p>
                 </div>
             </div>
