@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SiFunding BSI</title>
+    <title>Daftar Akun - SiFunding BSI</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -38,36 +38,36 @@
                     <img class="h-16 w-auto mb-6" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg" alt="Logo BSI">
                     
                     <h2 class="text-3xl font-bold text-gray-900 tracking-tight">
-                        Selamat Datang
+                        Buat Akun Baru
                     </h2>
                     <p class="mt-2 text-sm text-gray-600">
-                        Silakan masuk untuk mengakses <br>
-                        <span class="font-semibold text-bsi-teal">Sistem Monitoring Distribusi Buku Tabungan</span>
+                        Bergabunglah untuk mempermudah monitoring data nasabah.
                     </p>
                 </div>
 
                 <div class="mt-8">
-                    @if ($errors->any())
-                        <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
-                            <div class="flex">
-                                <div class="ml-3">
-                                    <p class="text-sm text-red-700">Email atau password salah.</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('register') }}" method="POST" class="space-y-5">
                         @csrf 
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">
+                            <label for="name" class="block text-sm font-medium text-gray-700">
                                 Username
+                            </label>
+                            <div class="mt-1">
+                                <input id="name" name="name" type="text" autocomplete="name" required 
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    placeholder="Contoh: Budi Santoso">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">
+                                Email
                             </label>
                             <div class="mt-1">
                                 <input id="email" name="email" type="email" autocomplete="email" required 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
-                                    placeholder="Masukkan username Anda">
+                                    placeholder="nama@bankbsi.co.id">
                             </div>
                         </div>
 
@@ -76,68 +76,65 @@
                                 Password
                             </label>
                             <div class="mt-1">
-                                <input id="password" name="password" type="password" autocomplete="current-password" required 
+                                <input id="password" name="password" type="password" autocomplete="new-password" required 
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
-                                    placeholder="••••••••">
+                                    placeholder="Minimal 8 karakter">
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input id="remember_me" name="remember" type="checkbox" 
-                                    class="h-4 w-4 text-bsi-teal focus:ring-bsi-teal border-gray-300 rounded cursor-pointer">
-                                <label for="remember_me" class="ml-2 block text-sm text-gray-900 cursor-pointer">
-                                    Ingat saya
-                                </label>
+                        <div>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
+                                Konfirmasi Password
+                            </label>
+                            <div class="mt-1">
+                                <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required 
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    placeholder="Ulangi password di atas">
                             </div>
-                            
-                            <div class="text-sm">
-                                <a href="#" class="font-medium text-bsi-teal hover:text-bsi-dark">
-                                    Lupa password?
-                                </a>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="terms" name="terms" type="checkbox" required class="focus:ring-bsi-teal h-4 w-4 text-bsi-teal border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="terms" class="font-medium text-gray-700">Saya menyetujui <a href="#" class="text-bsi-teal hover:underline">Syarat & Ketentuan</a>.</label>
                             </div>
                         </div>
 
                         <div>
                             <button type="submit" 
                                 class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-bsi-orange hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bsi-orange transition duration-300 ease-in-out transform hover:-translate-y-0.5">
-                                Masuk ke Dashboard
+                                Daftar Sekarang
                             </button>
                         </div>
                     </form>
 
                     <div class="mt-6 text-center">
                         <p class="text-sm text-gray-600">
-                            Belum memiliki akun? 
-                            <a href="{{ route('register') }}" class="font-medium text-bsi-teal hover:text-bsi-dark hover:underline">
-                                Daftar sekarang
+                            Sudah memiliki akun? 
+                            <a href="{{ route('login') }}" class="font-medium text-bsi-teal hover:text-bsi-dark hover:underline">
+                                Masuk di sini
                             </a>
                         </p>
                     </div>
 
                 </div>
-                
-                <div class="mt-10 text-center">
-                    <p class="text-xs text-gray-400">
-                        &copy; 2026 Bank Syariah Indonesia KC Diponegoro.<br>Dilindungi Undang-Undang.
-                    </p>
-                </div>
             </div>
         </div>
 
-        <div class="hidden lg:block relative w-0 flex-1 bg-gray-900">
-            <img class="absolute inset-0 h-full w-full object-cover opacity-60" 
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-                alt="Office Background">
+        <div class="hidden lg:block relative w-0 flex-1 bg-bsi-teal">
+            <img class="absolute inset-0 h-full w-full object-cover opacity-50" 
+                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                alt="Meeting Background">
             
-            <div class="absolute inset-0 bg-gradient-to-br from-bsi-teal to-gray-900 opacity-80 mix-blend-multiply"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-bsi-teal via-transparent to-transparent opacity-90"></div>
             
             <div class="absolute inset-0 flex flex-col items-center justify-center p-20 text-center">
                 <div class="z-10 text-white max-w-2xl">
-                    <img class="h-12 w-auto mx-auto mb-8 opacity-80" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg" style="filter: brightness(0) invert(1);" alt="Logo Putih">
-                    <h1 class="text-4xl font-bold mb-6 leading-tight">Efisiensi & Akurasi dalam Satu Genggaman</h1>
-                    <p class="text-lg text-teal-100 font-light leading-relaxed">
-                        Sistem Informasi Funding mempermudah tracking berkas nasabah dan distribusi buku tabungan secara real-time.
+                    <h1 class="text-4xl font-bold mb-6">Bergabung dengan Ekosistem Digital BSI</h1>
+                    <p class="text-lg text-teal-50 font-light leading-relaxed">
+                        Daftarkan diri Anda untuk mulai mengelola berkas dan memantau distribusi layanan perbankan dengan lebih efisien.
                     </p>
                 </div>
             </div>
