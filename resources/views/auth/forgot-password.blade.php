@@ -16,7 +16,7 @@
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Terdaftar</label>
                 <input id="email" 
                        class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 
-                              focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal focus:bg-white focus:outline-none 
+                              focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal focus:bg-white focus:outline-none 
                               transition duration-200 sm:text-sm placeholder-gray-400" 
                        type="email" 
                        name="email" 

@@ -65,7 +65,7 @@
                             </label>
                             <div class="mt-1">
                                 <input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus autocomplete="username" 
-                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Contoh: budisantoso">
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                             </label>
                             <div class="mt-1">
                                 <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email" 
-                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="nama@bankbsi.co.id">
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             </label>
                             <div class="mt-1">
                                 <input id="password" name="password" type="password" required autocomplete="new-password" 
-                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Minimal 8 karakter">
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             </label>
                             <div class="mt-1">
                                 <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" 
-                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
+                                    class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition duration-200"
                                     placeholder="Ulangi password di atas">
                             </div>
                         </div>
@@ -119,7 +119,7 @@
 
                         <div>
                             <button type="submit" 
-                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-bsi-orange hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bsi-orange transition duration-300 ease-in-out transform hover:-translate-y-0.5">
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-bsi-orange hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bsi-orange transition duration-300 ease-in-out transform hover:-translate-y-0.5">
                                 Daftar Sekarang
                             </button>
                         </div>
