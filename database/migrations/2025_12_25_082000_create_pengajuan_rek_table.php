@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('pengajuan_rek', function (Blueprint $table) {
             $table->id();
             $table->foreignId('nasabah_id')->constrained('nasabah')->onDelete('cascade');
+            $table->enum('jenis_produk', ['Payroll Wadiah','Easy Wadiah','Easy Mudharabah', 'Haji', 'Tapenas'])->default('Payroll Wadiah');
             $table->string('no_rek')->nullable(); 
-            $table->enum('status', ['draft', 'process', 'ready', 'done'])->default('draft'); // [cite: 17, 18, 19, 20]
+            $table->enum('status', ['draft', 'process', 'ready', 'done'])->default('draft'); 
             $table->timestamp('tanggal_input')->useCurrent(); 
             $table->timestamp('tanggal_serah_terima')->nullable(); 
             $table->timestamps();
