@@ -27,20 +27,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // --- DATA NASABAH ---
-    // Saya arahkan ke view sementara jika controller belum siap, 
-    // tapi kalau NasabahController sudah ada method index-nya, pakai baris kedua.
-    Route::get('/funding/nasabah', function() {
-        return "Halaman Data Nasabah (Belum dibuat view-nya)";
+    Route::get('/funding/nasabah', function () {
+        return view('funding.nasabah.index');
     })->name('nasabah.index');
-    // Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
-
 
     // --- TRACKING BERKAS ---
-    Route::get('/funding/tracking', function() {
-        return "Halaman Tracking Berkas (Belum dibuat view-nya)";
+    Route::get('/funding/tracking', function () {
+        // Memanggil file resources/views/funding/tracking/index.blade.php
+        return view('funding.tracking.index');
     })->name('tracking.index');
-    // Route::get('/funding/tracking', [MonitoringController::class, 'index'])->name('tracking.index');
-
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

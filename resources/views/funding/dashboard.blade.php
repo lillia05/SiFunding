@@ -22,14 +22,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
-            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div> 
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gray-600"></div> 
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Nasabah</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">103</h3>
                     <p class="text-xs text-gray-400 mt-2">Data bulan ini</p>
                 </div>
-                <div class="p-3 bg-indigo-50 rounded-lg text-indigo-600">
+                <div class="p-3 bg-indigo-50 rounded-lg text-gray-600">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
             </div>
@@ -67,7 +67,7 @@
             <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-bsi-teal"></div>
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Sudah Selesai</p>
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Sudah Diserahkan</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">86</h3>
                     <p class="text-xs text-teal-700 mt-2 bg-teal-50 inline-block px-2 py-1 rounded">Done</p>
                 </div>
@@ -82,7 +82,7 @@
     <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
         <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-heading font-semibold text-gray-800">Aktivitas Terbaru</h3>
-            <a href="#" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya &rarr;</a>
+            <a href="#" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya</a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">

@@ -1,0 +1,139 @@
+@extends('layouts.funding')
+
+@section('title', 'Tracking Berkas - SiFunding')
+
+@section('content')
+
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-heading font-bold text-gray-800">Tracking Berkas</h1>
+            <p class="text-sm text-gray-500 mt-1">Pantau progres pencetakan dan distribusi buku tabungan.</p>
+        </div>
+        
+        <div class="flex gap-3">
+            <button class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 shadow-sm transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Refresh Data
+            </button>
+            <button class="inline-flex items-center px-4 py-2 bg-bsi-teal text-white rounded-lg text-sm font-bold shadow-md hover:bg-teal-700 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 17h.01M9 20h.01M12 20h.01M15 20h.01M15 17h.01M15 14h.01M9 17h.01M9 14h.01M6 14h.01M6 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Scan Barcode
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <form action="" method="GET" class="flex flex-col md:flex-row gap-4">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input type="text" name="search" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal transition" placeholder="Cari Nama Nasabah / No. Resi...">
+            </div>
+            <select name="status" class="block w-full md:w-48 pl-3 pr-8 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal bg-white">
+                <option value="">Semua Status</option>
+                <option value="process">Menunggu Cetak</option>
+                <option value="ready">Siap Diserahkan</option>
+                <option value="done">Sudah Diserahkan</option>
+            </select>
+            <button type="submit" class="px-6 py-2 bg-bsi-teal text-white rounded-lg text-sm font-medium hover:bg-teal-700 transition">Filter</button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">No</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nasabah</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Layanan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Tgl Masuk</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Progres</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Update Terakhir</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Ahmad Fauzi</div>
+                            <div class="text-xs text-gray-500">NIK: 1871...0001</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Easy Wadiah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ date('d M Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap align-middle">
+                            <div class="flex items-center space-x-1">
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal" title="Input"></div>
+                                <div class="w-8 h-2 rounded-full bg-yellow-400" title="Proses Cetak"></div>
+                                <div class="w-8 h-2 rounded-full bg-gray-200" title="Siap Serah"></div>
+                                <div class="w-8 h-2 rounded-full bg-gray-200" title="Selesai"></div>
+                            </div>
+                            <span class="text-xs text-yellow-600 font-medium mt-1 block">Sedang Dicetak</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                            2 Jam yang lalu
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900 text-xs border border-blue-200 bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100 transition">Update Status</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Budi Santoso</div>
+                            <div class="text-xs text-gray-500">NIK: 3201...0002</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Mudharabah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">24 Des 2025</td>
+                        <td class="px-6 py-4 whitespace-nowrap align-middle">
+                            <div class="flex items-center space-x-1">
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                                <div class="w-8 h-2 rounded-full bg-blue-500"></div>
+                                <div class="w-8 h-2 rounded-full bg-gray-200"></div>
+                            </div>
+                            <span class="text-xs text-blue-600 font-medium mt-1 block">Siap Diserahkan</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                            Kemarin, 14:00
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <button class="text-white hover:bg-teal-700 bg-bsi-teal px-3 py-1 rounded-full text-xs shadow-sm transition">Serahkan</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50 transition bg-gray-50/50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Siti Aminah</div>
+                            <div class="text-xs text-gray-500">NIK: 1871...0003</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Easy Wadiah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">20 Des 2025</td>
+                        <td class="px-6 py-4 whitespace-nowrap align-middle">
+                            <div class="flex items-center space-x-1">
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                                <div class="w-8 h-2 rounded-full bg-bsi-teal"></div>
+                            </div>
+                            <span class="text-xs text-bsi-teal font-medium mt-1 block">Selesai</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                            20 Des, 10:00
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <a href="#" class="text-gray-400 hover:text-gray-600">Detail</a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@endsection
