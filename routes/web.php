@@ -1,54 +1,53 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\NasabahController; 
-use App\Http\Controllers\MonitoringController; 
+use App\Http\Controllers\NasabahController;
+use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+// 1. Halaman Awal langsung lempar ke Login
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-// Rute umum 
+// 2. Group Route yang butuh Login
 Route::middleware(['auth', 'verified'])->group(function () {
-    
-    Route::get('/dashboard', function () {
-        return view('funding.dashboard');
-    })->name('dashboard');
 
+    // --- DASHBOARD FUNDING ---
+    // Nama route ini 'funding.dashboard' HARUS SAMA dengan yang ada di sidebar.blade.php
+    Route::get('/funding/dashboard', function () {
+        return view('funding.dashboard'); 
+    })->name('funding.dashboard');
+
+
+    // --- DATA NASABAH ---
+    // Saya arahkan ke view sementara jika controller belum siap, 
+    // tapi kalau NasabahController sudah ada method index-nya, pakai baris kedua.
+    Route::get('/funding/nasabah', function() {
+        return "Halaman Data Nasabah (Belum dibuat view-nya)";
+    })->name('nasabah.index');
+    // Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
+
+
+    // --- TRACKING BERKAS ---
+    Route::get('/funding/tracking', function() {
+        return "Halaman Tracking Berkas (Belum dibuat view-nya)";
+    })->name('tracking.index');
+    // Route::get('/funding/tracking', [MonitoringController::class, 'index'])->name('tracking.index');
+
+
+    // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // --- FITUR KHUSUS ADMIN ---
-    Route::middleware('role:Admin')->group(function () {
-        Route::get('/admin/users', function() {
-            return "Halaman Kelola Pengguna (Hanya Admin)";
-        })->name('admin.users');
-    });
 
-    // --- FITUR PETUGAS FUNDING & ADMIN ---
-    Route::middleware('role:Admin,Funding')->group(function () {
-        Route::get('/funding/monitoring', [MonitoringController::class, 'index'])->name('funding.index');
-        Route::get('/funding/tracking', [MonitoringController::class, 'tracking'])->name('funding.tracking');
-    });
-
-    // --- FITUR NASABAH ---
-    Route::middleware('role:Nasabah')->group(function () {
-        Route::get('/pendaftaran', [NasabahController::class, 'create'])->name('nasabah.daftar');
-        Route::post('/pendaftaran', [NasabahController::class, 'store'])->name('nasabah.simpan');
-    });
 });
 
+// 3. Memuat route autentikasi bawaan (Login, Register, Logout)
 require __DIR__.'/auth.php';
