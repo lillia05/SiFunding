@@ -21,9 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- DASHBOARD FUNDING ---
     // Nama route ini 'funding.dashboard' HARUS SAMA dengan yang ada di sidebar.blade.php
-    Route::get('/funding/dashboard', function () {
-        return view('funding.dashboard'); 
-    })->name('funding.dashboard');
+    Route::get('/funding/dashboard', [MonitoringController::class, 'index'])->name('funding.dashboard');
 
 
     // --- DATA NASABAH ---

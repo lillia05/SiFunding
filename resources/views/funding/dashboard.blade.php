@@ -26,7 +26,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Nasabah</p>
-                    <h3 class="text-3xl font-bold text-gray-800 mt-2">103</h3>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalNasabah }}</p>
                     <p class="text-xs text-gray-400 mt-2">Data bulan ini</p>
                 </div>
                 <div class="p-3 bg-indigo-50 rounded-lg text-gray-600">
@@ -40,7 +40,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Menunggu Cetak</p>
-                    <h3 class="text-3xl font-bold text-gray-800 mt-2">12</h3>
+                    <p class="text-3xl font-bold text-yellow-600 mt-2">{{ $pendingCount }}</p>
                     <p class="text-xs text-yellow-600 mt-2 bg-yellow-50 inline-block px-2 py-1 rounded">Pending</p>
                 </div>
                 <div class="p-3 bg-yellow-50 rounded-lg text-yellow-500">
@@ -54,7 +54,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Siap Diserahkan</p>
-                    <h3 class="text-3xl font-bold text-gray-800 mt-2">5</h3>
+                    <p class="text-3xl font-bold text-blue-600 mt-2">{{ $readyCount }}</p>
                     <p class="text-xs text-blue-600 mt-2 bg-blue-50 inline-block px-2 py-1 rounded">Ready</p>
                 </div>
                 <div class="p-3 bg-blue-50 rounded-lg text-blue-500">
@@ -68,7 +68,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Sudah Diserahkan</p>
-                    <h3 class="text-3xl font-bold text-gray-800 mt-2">86</h3>
+                    <p class="text-3xl font-bold text-bsi-teal mt-2">{{ $doneCount }}</p>
                     <p class="text-xs text-teal-700 mt-2 bg-teal-50 inline-block px-2 py-1 rounded">Done</p>
                 </div>
                 <div class="p-3 bg-teal-50 rounded-lg text-bsi-teal">
@@ -96,23 +96,25 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
+                    @forelse($antreanTerbaru as $item)
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="h-8 w-8 rounded-full bg-gradient-to-tr from-gray-200 to-gray-300 flex items-center justify-center text-xs font-bold text-gray-600">
-                                    AF
+                                <div class="h-8 w-8 rounded-full bg-bsi-teal flex items-center justify-center text-xs font-bold text-white uppercase">
+                                    {{ substr($item->nasabah->user->name ?? 'N', 0, 2) }}
                                 </div>
                                 <div class="ml-3">
-                                    <div class="text-sm font-semibold text-gray-900">Ahmad Fauzi</div>
-                                    <div class="text-xs text-gray-500">NIK: 187123...</div>
+                                    <div class="text-sm font-semibold text-gray-900">{{ $item->nasabah->user->username ?? 'Nasabah' }}</div>
+                                    <div class="text-xs text-gray-500">NIK: {{ $item->nasabah->nik_ktp }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Easy Wadiah</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hari ini, 09:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $item->jenis_produk }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->created_at->diffForHumans() }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-700">
-                                Pending
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {{ $item->status == 'done' ? 'bg-teal-100 text-teal-700' : 'bg-yellow-100 text-yellow-700' }}">
+                                {{ strtoupper($item->status) }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -121,31 +123,11 @@
                             </a>
                         </td>
                     </tr>
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="h-8 w-8 rounded-full bg-gradient-to-tr from-gray-200 to-gray-300 flex items-center justify-center text-xs font-bold text-gray-600">
-                                    SA
-                                </div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-semibold text-gray-900">Siti Aminah</div>
-                                    <div class="text-xs text-gray-500">NIK: 187456...</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Mudharabah</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Kemarin, 14:15</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-teal-100 text-teal-700">
-                                Selesai
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="#" class="text-gray-400 hover:text-bsi-teal">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </a>
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500 italic">Belum ada aktivitas pendaftaran.</td>
                     </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
