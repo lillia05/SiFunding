@@ -1,25 +1,42 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div class="px-2 py-2">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">Lupa Kata Sandi?</h2>
+            <p class="mt-3 text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">
+                Masukkan email yang terdaftar. Kami akan mengirimkan tautan untuk mengatur ulang kata sandi Anda.
+            </p>
+        </div>
+
+        <x-auth-session-status class="mb-4" :status="session('status')" />
+
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
+
+            <div class="mb-6">
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email Terdaftar</label>
+                <input id="email" 
+                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 
+                              focus:ring-2 focus:ring-bsi-teal focus:border-bsi-teal focus:bg-white focus:outline-none 
+                              transition duration-200 sm:text-sm placeholder-gray-400" 
+                       type="email" 
+                       name="email" 
+                       :value="old('email')" 
+                       required autofocus 
+                       placeholder="contoh: nama@bsi.co.id" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
+
+            <div class="mb-4">
+                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-bold text-white bg-bsi-teal hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bsi-teal transition duration-300 transform hover:-translate-y-0.5">
+                    Kirim Tautan Reset
+                </button>
+            </div>
+
+            <div class="text-center mt-6">
+                <a href="{{ route('login') }}" class="inline-flex items-center text-sm font-medium text-bsi-teal hover:text-bsi-dark hover:underline transition-colors group">
+                    Kembali ke Halaman Login
+                </a>
+            </div>
+        </form>
     </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
 </x-guest-layout>
