@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Nasabah;
 use App\Models\User;
 use App\Models\PengajuanRek;
+use App\Models\PekerjaanNasabah; 
+use App\Models\StatusLog;        
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage; 
 
 class NasabahController extends Controller
 {
@@ -20,23 +23,12 @@ class NasabahController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('nik_ktp', 'like', "%$search%")
                   ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('username', 'like', "%$search%");
-                  })
-                  ->orWhereHas('pengajuan', function($pengajuanQuery) use ($search) {
-                      $pengajuanQuery->where('no_rek', 'like', "%$search%");
+                      $userQuery->where('username', 'like', "%$search%"); 
                   });
             });
         }
 
-        if ($request->filled('produk')) {
-            $produk = $request->produk;
-            $query->whereHas('pengajuan', function($q) use ($produk) {
-                $q->where('jenis_produk', 'like', "%$produk%");
-            });
-        }
-
         $nasabah = $query->latest()->paginate(10);
-
         return view('funding.nasabah.index', compact('nasabah'));
     }
 
@@ -44,52 +36,110 @@ class NasabahController extends Controller
     {
         return view('funding.nasabah.create');
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'jenis_produk' => 'required',
+            
             'nik_ktp' => 'required|numeric|digits:16|unique:nasabah,nik_ktp',
-            'no_hp' => 'required',
-            'jenis_produk' => 'required'
+            'no_hp' => 'required|numeric',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'nama_ibu' => 'required',
+            'alamat' => 'required',
+            'status_pernikahan' => 'required',
+            
+            'area_kerja' => 'required',
+            'jabatan' => 'required',
+
+            'nama_keluarga' => 'required',
+            'hp_keluarga' => 'required',
+            'alamat_keluarga' => 'required',
+
+            'foto_ktp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_npwp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        DB::transaction(function () use ($request) {
-            $user = User::create([
-                'username' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make('12345678'),
-                'role' => 'Nasabah',
-                'email_verified_at' => now(),
-            ]);
+        try {
+            DB::transaction(function () use ($request) {
+                
+                $pathKtp = null;
+                $pathNpwp = null;
 
-            $nasabah = Nasabah::create([
-                'user_id' => $user->id,
-                'nik_ktp' => $request->nik_ktp,
-                'tempat_lahir' => $request->tempat_lahir,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-                'nama_ibu' => $request->nama_ibu,
-                'kode_pos' => $request->kode_pos ?? '-',
-                'status_pernikahan' => $request->status_pernikahan ?? '-',
-                'nama_keluarga_tidak_serumah' => $request->nama_keluarga ?? '-',
-                'alamat_keluarga_tidak_serumah' => $request->alamat_keluarga ?? '-',
-                'no_hp_keluarga_tidak_serumah' => $request->hp_keluarga ?? '-',
-            ]);
+                if ($request->hasFile('foto_ktp')) {
+                    $pathKtp = $request->file('foto_ktp')->store('dokumen_nasabah', 'public');
+                }
 
-            PengajuanRek::create([
-                'nasabah_id' => $nasabah->id,
-                'jenis_produk' => $request->jenis_produk,
-                'status' => 'draft',
-                'tanggal_input' => now(),
-            ]);
-        });
+                if ($request->hasFile('foto_npwp')) {
+                    $pathNpwp = $request->file('foto_npwp')->store('dokumen_nasabah', 'public');
+                }
 
-        return redirect()->back()->with('success', 'Data nasabah berhasil ditambahkan!');
+                $user = User::create([
+                    'username' => $request->username, 
+                    'email' => $request->email,
+                    'password' => Hash::make('12345678'), 
+                    'role' => 'Nasabah',
+                    'email_verified_at' => now(),
+                ]);
+
+                $nasabah = Nasabah::create([
+                    'user_id' => $user->id,
+                    'nik_ktp' => $request->nik_ktp,
+                    'npwp' => $request->npwp,
+                    'tempat_lahir' => $request->tempat_lahir,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'no_hp' => $request->no_hp,
+                    'alamat' => $request->alamat,
+                    'kode_pos' => $request->kode_pos,
+                    'nama_ibu' => $request->nama_ibu,
+                    'status_pernikahan' => $request->status_pernikahan,
+                    'rek_bsi_lama' => $request->rek_bsi_lama,
+                    'nama_keluarga_tidak_serumah' => $request->nama_keluarga,
+                    'alamat_keluarga_tidak_serumah' => $request->alamat_keluarga,
+                    'no_hp_keluarga_tidak_serumah' => $request->hp_keluarga,
+                    'foto_ktp' => $pathKtp,
+                    'foto_npwp' => $pathNpwp,
+                ]);
+
+                PekerjaanNasabah::create([
+                    'nasabah_id' => $nasabah->id,
+                    'area_kerja' => $request->area_kerja,
+                    'jabatan' => $request->jabatan,
+                ]);
+
+                $pengajuan = PengajuanRek::create([
+                    'nasabah_id' => $nasabah->id,
+                    'jenis_produk' => $request->jenis_produk,
+                    'status' => 'draft',
+                    'tanggal_input' => now(),
+                ]);
+
+                StatusLog::create([
+                    'pengajuan_id' => $pengajuan->id,
+                    'user_id' => auth()->id(), 
+                    'status_lama' => null,
+                    'status_baru' => 'draft',
+                    'catatan' => 'Input data baru oleh Funding Officer',
+                ]);
+
+            });
+
+            return redirect()->route('tracking.index')->with('success', 'Data nasabah berhasil disimpan dan masuk antrean!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
-    // UPDATE - Proses Perbarui Data
+    public function show($id)
+    {
+        $nasabah = Nasabah::with(['user', 'pekerjaan', 'pengajuan'])->findOrFail($id);
+        return view('funding.nasabah.show', compact('nasabah'));
+    }
+
     public function update(Request $request, $id)
     {
         $nasabah = Nasabah::findOrFail($id);
@@ -99,7 +149,7 @@ class NasabahController extends Controller
         ]));
 
         $nasabah->user->update([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email
         ]);
 
@@ -114,12 +164,5 @@ class NasabahController extends Controller
         return redirect()->back()->with('success', 'Data nasabah telah dihapus.');
     }
 
-    // ... method destroy sebelumnya ...
 
-    // TAMBAHKAN FUNGSI INI:
-    public function show($id)
-    {
-        $nasabah = Nasabah::with(['user', 'pekerjaan', 'pengajuan'])->findOrFail($id);
-        return view('funding.nasabah.show', compact('nasabah'));
-    }
 }

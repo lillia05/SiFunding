@@ -48,7 +48,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap (Sesuai KTP)</label>
-                            <input type="text" name="name" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-gray-50 focus:bg-white" placeholder="Masukkan nama lengkap" required>
+                            <input type="text" name="username" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-gray-50 focus:bg-white" placeholder="Masukkan nama lengkap" required>
                         </div>
 
                         <div>
@@ -159,12 +159,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Area Kerja</label>
-                            <input type="text" name="nama_instansi" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: PLN UPT Bengkulu, GI Lahat, dll" required>
+                            <input type="text" name="area_kerja" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: PLN UPT Bengkulu, GI Lahat, dll" required>
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan</label>
-                            <input type="text" name="pekerjaan" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: Satpam, Cleaning Service, Teknisi" required>
+                            <input type="text" name="jabatan" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: Satpam, Cleaning Service, Teknisi" required>
                         </div>
                     </div>
                 </div>
