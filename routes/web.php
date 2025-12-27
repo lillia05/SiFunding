@@ -39,14 +39,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('nasabah.show');
     
     // --- TRACKING BERKAS ---
-    Route::get('/funding/tracking', function () {
-        // Memanggil file resources/views/funding/tracking/index.blade.php
-        return view('funding.tracking.index');
-    })->name('tracking.index');
-    // untuk halaman Detail:
-    Route::get('/funding/tracking/detail', function () {
-        return view('funding.tracking.show');
-    })->name('tracking.show');
+    Route::get('/funding/tracking', [MonitoringController::class, 'trackingPage'])->name('tracking.index');
+    Route::get('/funding/tracking/detail', [MonitoringController::class, 'doTracking'])->name('tracking.show');
+    Route::post('/funding/update-status/{id}', [MonitoringController::class, 'updateStatus'])->name('funding.updateStatus');
+    Route::get('/funding/tracking/detail', [MonitoringController::class, 'doTracking'])->name('tracking.show');
+
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
