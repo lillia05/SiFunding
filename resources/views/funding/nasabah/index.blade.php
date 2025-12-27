@@ -28,6 +28,7 @@
         </div>
     </div>
 
+
     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6">
         <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             
@@ -41,8 +42,26 @@
             <div class="relative">
                 <select name="produk" class="block w-full pl-3 pr-8 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm cursor-pointer">
                     <option value="">- Semua Produk -</option>
-                    <option value="wadiah">Easy Wadiah</option>
-                    <option value="mudharabah">Mudharabah</option>
+                    
+                    <option value="Payroll Wadiah" {{ request('produk') == 'Payroll Wadiah' ? 'selected' : '' }}>
+                        Payroll Wadiah
+                    </option>
+
+                    <option value="Easy Wadiah" {{ request('produk') == 'Easy Wadiah' ? 'selected' : '' }}>
+                        Easy Wadiah
+                    </option>
+                    
+                    <option value="Easy Mudharabah" {{ request('produk') == 'Easy Mudharabah' ? 'selected' : '' }}>
+                        Easy Mudharabah
+                    </option>
+
+                    <option value="Haji" {{ request('produk') == 'Haji' ? 'selected' : '' }}>
+                        Tabungan Haji
+                    </option>
+
+                    <option value="Tapenas" {{ request('produk') == 'Bisnis' ? 'selected' : '' }}>
+                        Tapenas
+                    </option>
                 </select>
             </div>
 
@@ -70,16 +89,23 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    
+                    @forelse($nasabah as $index => $item) 
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border-r border-gray-100">1</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-100">Ahmad Fauzi</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">1871042005990001</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Bandar Lampung</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">20-05-1999</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">7001234567</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Easy Wadiah</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">0812-3456-7890</td>
+                        <td class="px-4 py-3 text-sm text-gray-500 border-r">{{ $nasabah->firstItem() + $index }}</td>
+                        
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900 border-r">
+                            {{ $item->user->name ?? $item->user->username }}
+                        </td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-600 border-r">{{ $item->nik_ktp }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 border-r">{{ $item->tempat_lahir }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 border-r">{{ \Carbon\Carbon::parse($item->tanggal_lahir)->format('d-m-Y') }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-600 border-r">
+                            {{ $item->pengajuan->first()->no_rek ?? '-' }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 border-r">
+                            {{ $item->pengajuan->first()->jenis_produk ?? '-' }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 border-r">{{ $item->no_hp }}</td>
                         
                         <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-medium sticky right-0 bg-white shadow-sm">
                             <div class="flex justify-center items-center space-x-2">
@@ -89,63 +115,26 @@
                             </div>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border-r border-gray-100">2</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-100">Budi Santoso</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">3201241508880002</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Jakarta</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">15-08-1988</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">7009876543</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Mudharabah</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">0899-8877-6655</td>
-                        
-                        <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-medium sticky right-0 bg-white shadow-sm">
-                            <div class="flex justify-center items-center space-x-2">
-                                <button class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                                <button class="p-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                                <button class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                            </div>
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="9" class="px-4 py-10 text-center text-gray-500">Data nasabah tidak ditemukan.</td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border-r border-gray-100">3</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-100">Siti Aminah</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">1871056501900003</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Metro</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">25-01-1990</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-mono text-gray-600 border-r border-gray-100">7005554443</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">Easy Wadiah</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 border-r border-gray-100">0857-1234-5678</td>
-                        
-                        <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-medium sticky right-0 bg-white shadow-sm">
-                            <div class="flex justify-center items-center space-x-2">
-                                <button class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                                <button class="p-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                                <button class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                            </div>
-                        </td>
-                    </tr>
-
+                    @endforelse
                 </tbody>
             </table>
         </div>
         
-        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 flex items-center justify-between sm:px-6">
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 sm:px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <p class="text-sm text-gray-700">
-                        Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">3</span> dari <span class="font-medium">50</span> data
+                        Menampilkan <span class="font-medium">{{ $nasabah->firstItem() }}</span> 
+                        sampai <span class="font-medium">{{ $nasabah->lastItem() }}</span> 
+                        dari <span class="font-medium">{{ $nasabah->total() }}</span> data
                     </p>
                 </div>
                 <div>
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">Prev</a>
-                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">1</a>
-                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
-                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">Next</a>
-                    </nav>
+                    {{ $nasabah->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>

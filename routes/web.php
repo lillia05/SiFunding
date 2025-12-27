@@ -25,9 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // --- DATA NASABAH ---
-    Route::get('/funding/nasabah', function () {
-        return view('funding.nasabah.index');
-    })->name('nasabah.index');
+    Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
 
     // --- TRACKING BERKAS ---
     Route::get('/funding/tracking', function () {
