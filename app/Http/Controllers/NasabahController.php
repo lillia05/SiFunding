@@ -40,6 +40,11 @@ class NasabahController extends Controller
         return view('funding.nasabah.index', compact('nasabah'));
     }
 
+    public function create()
+    {
+        return view('funding.nasabah.create');
+    }
+    
     public function store(Request $request)
     {
         $request->validate([

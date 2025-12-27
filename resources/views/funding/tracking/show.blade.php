@@ -9,7 +9,7 @@
         <div class="mb-6">
             <a href="{{ route('tracking.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:text-bsi-teal hover:border-bsi-teal hover:bg-teal-50 transition shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Kembali ke Tracking
+                Kembali
             </a>
         </div>
 
