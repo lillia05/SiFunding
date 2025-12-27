@@ -77,7 +77,7 @@
                                 x-data=""
                                 x-on:click.prevent="$dispatch('open-modal', 'confirm-printing')"
                                 class="text-blue-600 hover:text-blue-900 text-xs border border-blue-200 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition shadow-sm font-semibold">
-                                Update Status
+                                Update Progress
                             </button>
                         </td>
                     </tr>
