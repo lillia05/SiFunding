@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\NasabahExport;
+use App\Imports\NasabahImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Nasabah;
 use App\Models\User;
@@ -264,6 +265,21 @@ class NasabahController extends Controller
     public function export() 
     {
         return Excel::download(new NasabahExport, 'data_nasabah_' . date('d-m-Y_H-i') . '.xlsx');
+    }
+
+    public function import(Request $request) 
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new NasabahImport, $request->file('file_excel'));
+            
+            return redirect()->back()->with('success', 'Data nasabah berhasil diimport!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal import: ' . $e->getMessage());
+        }
     }
 
 }
