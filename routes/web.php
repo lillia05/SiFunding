@@ -32,6 +32,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Memanggil file resources/views/funding/tracking/index.blade.php
         return view('funding.tracking.index');
     })->name('tracking.index');
+    // untuk halaman Detail:
+    Route::get('/funding/tracking/detail', function () {
+        return view('funding.tracking.show');
+    })->name('tracking.show');
 
     // --- PROFILE ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
