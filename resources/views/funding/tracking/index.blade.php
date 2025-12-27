@@ -11,15 +11,13 @@
         </div>
         
         <div class="flex gap-3">
-            <button class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 shadow-sm transition">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                Refresh Data
-            </button>
-            <button class="inline-flex items-center px-4 py-2 bg-bsi-teal text-white rounded-lg text-sm font-bold shadow-md hover:bg-teal-700 transition">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 17h.01M9 20h.01M12 20h.01M15 20h.01M15 17h.01M15 14h.01M9 17h.01M9 14h.01M6 14h.01M6 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Scan Barcode
-            </button>
-        </div>
+    <button class="inline-flex items-center px-4 py-2 bg-bsi-teal text-white rounded-lg text-sm font-bold shadow-md hover:bg-teal-700 transition">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+        </svg>
+        Cetak Tanda Terima
+    </button>
+</div>
     </div>
 
     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
@@ -37,7 +35,6 @@
                 <option value="done">Sudah Diserahkan</option>
             </select>
             <button type="submit" class="px-6 py-2 bg-bsi-teal text-white rounded-lg text-sm font-medium hover:bg-teal-700 transition">Filter</button>
-        </form>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -47,8 +44,8 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">No</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nasabah</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Layanan</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Tgl Masuk</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Jenis Produk</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Tanggal Masuk</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Progres</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Update Terakhir</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Aksi</th>
@@ -71,7 +68,7 @@
                                 <div class="w-8 h-2 rounded-full bg-gray-200" title="Siap Serah"></div>
                                 <div class="w-8 h-2 rounded-full bg-gray-200" title="Selesai"></div>
                             </div>
-                            <span class="text-xs text-yellow-600 font-medium mt-1 block">Sedang Dicetak</span>
+                            <span class="text-xs text-yellow-600 font-medium mt-1 block">Menunggu Dicetak</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                             2 Jam yang lalu
