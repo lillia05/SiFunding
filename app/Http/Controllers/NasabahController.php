@@ -45,6 +45,7 @@ class NasabahController extends Controller
             'jenis_produk' => 'required',
             
             'nik_ktp' => 'required|numeric|digits:16|unique:nasabah,nik_ktp',
+            'npwp' => 'nullable|numeric',
             'no_hp' => 'required|numeric',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
@@ -59,7 +60,7 @@ class NasabahController extends Controller
             'hp_keluarga' => 'required',
             'alamat_keluarga' => 'required',
 
-            'foto_ktp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'foto_npwp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -140,20 +141,103 @@ class NasabahController extends Controller
         return view('funding.nasabah.show', compact('nasabah'));
     }
 
+    public function edit($id)
+    {
+        $nasabah = Nasabah::with(['user', 'pekerjaan', 'pengajuan'])->findOrFail($id);
+        return view('funding.nasabah.edit', compact('nasabah'));
+    }
+
     public function update(Request $request, $id)
     {
         $nasabah = Nasabah::findOrFail($id);
-        
-        $nasabah->update($request->only([
-            'nik_ktp', 'tempat_lahir', 'tanggal_lahir', 'no_hp', 'alamat', 'nama_ibu'
-        ]));
 
-        $nasabah->user->update([
-            'username' => $request->username,
-            'email' => $request->email
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $nasabah->user_id,
+            'jenis_produk' => 'required',
+            
+            'nik_ktp' => 'required|numeric|digits:16|unique:nasabah,nik_ktp,' . $id,
+            'npwp' => 'nullable|numeric',
+            'no_hp' => 'required|numeric',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'nama_ibu' => 'required',
+            'alamat' => 'required',
+            'status_pernikahan' => 'required',
+            
+            'area_kerja' => 'required',
+            'jabatan' => 'required',
+
+            'nama_keluarga' => 'required',
+            'hp_keluarga' => 'required',
+            'alamat_keluarga' => 'required',
+
+            'foto_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_npwp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        return redirect()->back()->with('success', 'Data berhasil diperbarui!');
+        try {
+            DB::transaction(function () use ($request, $nasabah) {
+                
+                $nasabah->user->update([
+                    'username' => $request->username,
+                    'email' => $request->email,
+                ]);
+
+                $pathKtp = $nasabah->foto_ktp; 
+                if ($request->hasFile('foto_ktp')) {
+                    if ($nasabah->foto_ktp && Storage::disk('public')->exists($nasabah->foto_ktp)) {
+                        Storage::disk('public')->delete($nasabah->foto_ktp);
+                    }
+                    $pathKtp = $request->file('foto_ktp')->store('dokumen_nasabah', 'public');
+                }
+
+                $pathNpwp = $nasabah->foto_npwp;
+                if ($request->hasFile('foto_npwp')) {
+                    if ($nasabah->foto_npwp && Storage::disk('public')->exists($nasabah->foto_npwp)) {
+                        Storage::disk('public')->delete($nasabah->foto_npwp);
+                    }
+                    $pathNpwp = $request->file('foto_npwp')->store('dokumen_nasabah', 'public');
+                }
+
+                $nasabah->update([
+                    'nik_ktp' => $request->nik_ktp,
+                    'npwp' => $request->npwp,
+                    'tempat_lahir' => $request->tempat_lahir,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'no_hp' => $request->no_hp,
+                    'alamat' => $request->alamat,
+                    'kode_pos' => $request->kode_pos,
+                    'nama_ibu' => $request->nama_ibu,
+                    'status_pernikahan' => $request->status_pernikahan,
+                    'rek_bsi_lama' => $request->rek_bsi_lama,
+                    'nama_keluarga_tidak_serumah' => $request->nama_keluarga,
+                    'alamat_keluarga_tidak_serumah' => $request->alamat_keluarga,
+                    'no_hp_keluarga_tidak_serumah' => $request->hp_keluarga,
+                    'foto_ktp' => $pathKtp,
+                    'foto_npwp' => $pathNpwp,
+                ]);
+
+                $nasabah->pekerjaan()->updateOrCreate(
+                    ['nasabah_id' => $nasabah->id],
+                    [
+                        'area_kerja' => $request->area_kerja,
+                        'jabatan' => $request->jabatan
+                    ]
+                );
+
+                $pengajuanTerakhir = $nasabah->pengajuan()->latest()->first();
+                if ($pengajuanTerakhir && $pengajuanTerakhir->status == 'draft') {
+                    $pengajuanTerakhir->update(['jenis_produk' => $request->jenis_produk]);
+                }
+
+            });
+
+            return redirect()->route('nasabah.index')->with('success', 'Data nasabah berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal update: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy($id)

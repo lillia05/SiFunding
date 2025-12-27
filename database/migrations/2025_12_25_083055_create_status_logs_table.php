@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pengajuan_id')->constrained('pengajuan_rek')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users'); 
-            $table->string('status_lama');
+            $table->string('status_lama')->nullable();
             $table->string('status_baru');
             $table->text('catatan')->nullable(); 
             $table->timestamps();
