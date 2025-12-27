@@ -44,7 +44,6 @@ class NasabahController extends Controller
     {
         return view('funding.nasabah.create');
     }
-    
     public function store(Request $request)
     {
         $request->validate([
@@ -113,5 +112,14 @@ class NasabahController extends Controller
         $nasabah->user->delete(); 
         
         return redirect()->back()->with('success', 'Data nasabah telah dihapus.');
+    }
+
+    // ... method destroy sebelumnya ...
+
+    // TAMBAHKAN FUNGSI INI:
+    public function show($id)
+    {
+        $nasabah = Nasabah::with(['user', 'pekerjaan', 'pengajuan'])->findOrFail($id);
+        return view('funding.nasabah.show', compact('nasabah'));
     }
 }
