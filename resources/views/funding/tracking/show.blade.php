@@ -18,17 +18,31 @@
             <div class="bg-teal-50 border-b border-teal-100 px-6 py-5 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
                 <div class="flex items-center mb-4 md:mb-0">
                     <div class="h-12 w-12 bg-bsi-teal text-white rounded-full flex items-center justify-center shadow-md mr-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        @if($pengajuan->status == 'done')
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        @else
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        @endif
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Buku Tabungan Diserahkan</h2>
-                        <p class="text-sm text-teal-600 font-medium">Proses tracking telah selesai sepenuhnya.</p>
+                        <h2 class="text-xl font-bold text-gray-800">
+                            @if($pengajuan->status == 'done') Buku Tabungan Diserahkan
+                            @elseif($pengajuan->status == 'ready') Buku Tabungan Siap Diserahkan
+                            @elseif($pengajuan->status == 'process') Sedang Dalam Proses Cetak
+                            @else Berkas Menunggu Verifikasi
+                            @endif
+                        </h2>
+                        <p class="text-sm text-teal-600 font-medium">
+                            @if($pengajuan->status == 'done') Proses tracking telah selesai sepenuhnya.
+                            @else Berkas sedang diproses oleh petugas.
+                            @endif
+                        </p>
                     </div>
                 </div>
                 
                 <div class="text-right">
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Waktu Penyerahan</p>
-                    <p class="text-lg font-bold text-gray-800">20 Des 2025, 10:00 WIB</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">Update Terakhir</p>
+                    <p class="text-lg font-bold text-gray-800">{{ $pengajuan->updated_at->format('d M Y, H:i') }} WIB</p>
                 </div>
             </div>
 
@@ -42,33 +56,31 @@
                     
                     <div class="border-b border-gray-100 pb-2">
                         <p class="text-xs text-gray-400 uppercase font-medium">Nama Nasabah</p>
-                        <p class="text-lg font-semibold text-gray-800 mt-1">Siti Aminah</p>
+                        <p class="text-lg font-semibold text-gray-800 mt-1">{{ $pengajuan->nasabah->user->username }}</p>
                     </div>
 
                     <div class="border-b border-gray-100 pb-2">
                         <p class="text-xs text-gray-400 uppercase font-medium">NIK (Nomor Induk Kependudukan)</p>
-                        <p class="text-lg font-mono text-gray-800 mt-1 bg-gray-50 inline-block px-2 rounded">1871056501900003</p>
+                        <p class="text-lg font-mono text-gray-800 mt-1 bg-gray-50 inline-block px-2 rounded">{{ $pengajuan->nasabah->nik_ktp }}</p>
                     </div>
 
                     <div class="border-b border-gray-100 pb-2">
                         <p class="text-xs text-gray-400 uppercase font-medium">Nomor Rekening</p>
                         <div class="flex items-center mt-1">
-                            <p class="text-xl font-bold text-bsi-teal font-mono">700-555-4443</p>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                            </button>
+                            <p class="text-xl font-bold text-bsi-teal font-mono">{{ $pengajuan->no_rek ?? 'Belum Terbit' }}</p>
                         </div>
                     </div>
 
                     <div class="border-b border-gray-100 pb-2">
                         <p class="text-xs text-gray-400 uppercase font-medium">Jenis Produk</p>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-teal-50 text-bsi-teal mt-1">
-                            Easy Wadiah
+                            {{ $pengajuan->jenis_produk }}
                         </span>
                     </div>
 
                     <div class="border-b border-gray-100 pb-2">
                         <p class="text-xs text-gray-400 uppercase font-medium">Nomor Telepon</p>
-                        <p class="text-lg font-semibold text-gray-800 mt-1">0857-1234-5678</p>
+                        <p class="text-lg font-semibold text-gray-800 mt-1">{{ $pengajuan->nasabah->no_hp }}</p>
                     </div>
 
                 </div>
