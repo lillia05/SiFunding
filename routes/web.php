@@ -20,37 +20,50 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- DASHBOARD FUNDING ---
-    // Nama route ini 'funding.dashboard' HARUS SAMA dengan yang ada di sidebar.blade.php
     Route::get('/funding/dashboard', [MonitoringController::class, 'index'])->name('funding.dashboard');
 
 
-    // --- DATA NASABAH ---
-    // Menampilkan tabel
+    // ================= DATA NASABAH =================
+
+    // 1. Menampilkan Tabel (Index)
     Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
-    // Menampilkan Form Input (TAMBAHKAN INI)
+
+    // 2. Form Input (Create) & Simpan (Store)
     Route::get('/funding/nasabah/create', [NasabahController::class, 'create'])->name('nasabah.create');
-    // Proses Simpan Data
     Route::post('/funding/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
-    Route::put('/funding/nasabah/{id}', [NasabahController::class, 'update'])->name('nasabah.update');
+
+    // 3. Form Edit (DUMMY - Langsung ke View)
+    Route::get('/funding/nasabah/{id}/edit', function () {
+        return view('funding.nasabah.edit');
+    })->name('nasabah.edit');
+
+    // 4. Proses Update (DUMMY - Redirect Langsung)
+    Route::put('/funding/nasabah/{id}', function () {
+        return redirect()->route('nasabah.index')->with('success', 'Data berhasil diperbarui (Dummy)!');
+    })->name('nasabah.update');
+
+    // 5. Hapus Data (Destroy)
     Route::delete('/funding/nasabah/{id}', [NasabahController::class, 'destroy'])->name('nasabah.destroy');
-    // Lihat Detail Nasabah
+
+    // 6. Lihat Detail (DUMMY - Langsung ke View)
+    // (Penting: Taruh route /{id} ini di urutan paling bawah dalam grup nasabah agar tidak bentrok)
     Route::get('/funding/nasabah/{id}', function () {
         return view('funding.nasabah.show');
     })->name('nasabah.show');
-    
-    // --- TRACKING BERKAS ---
+
+
+    // ================= TRACKING BERKAS =================
     Route::get('/funding/tracking', [MonitoringController::class, 'trackingPage'])->name('tracking.index');
     Route::get('/funding/tracking/detail', [MonitoringController::class, 'doTracking'])->name('tracking.show');
     Route::post('/funding/update-status/{id}', [MonitoringController::class, 'updateStatus'])->name('funding.updateStatus');
-    Route::get('/funding/tracking/detail', [MonitoringController::class, 'doTracking'])->name('tracking.show');
 
 
-    // --- PROFILE ---
+    // ================= PROFILE =================
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
 
-// 3. Memuat route autentikasi bawaan (Login, Register, Logout)
+// 3. Memuat route autentikasi bawaan
 require __DIR__.'/auth.php';
