@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
+use App\Models\Nasabah;
 use App\Models\PengajuanRek;
 use App\Models\StatusLog;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf; // IMPORT LIBRARY PDF
 
 class MonitoringController extends Controller
 {
@@ -41,7 +43,6 @@ class MonitoringController extends Controller
             $query->whereHas('nasabah', function ($q) use ($search) {
                 $q->where('nik_ktp', 'like', "%$search%")
                 ->orWhereHas('user', function($u) use ($search) {
-                    // Tambahkan pencarian Nama Lengkap agar lebih akurat
                     $u->where('username', 'like', "%$search%");
                 });
             });
@@ -117,5 +118,26 @@ class MonitoringController extends Controller
         }
 
         return view('funding.tracking.show', compact('pengajuan'));
+    }
+
+    // --- FUNGSI CETAK PDF (BARU) ---
+    public function cetakPdf()
+    {
+        // Ambil data nasabah yang statusnya 'ready' (Siap Diserahkan) atau 'done' (Selesai)
+        // Agar tanda terima hanya untuk yang sudah dicetak bukunya
+        $data_nasabah = Nasabah::with(['user', 'pengajuan'])
+                        ->whereHas('pengajuan', function($q) {
+                            $q->whereIn('status', ['ready', 'done']);
+                        })
+                        ->get();
+
+        // Load View PDF
+        $pdf = Pdf::loadView('funding.tracking.pdf', compact('data_nasabah'));
+
+        // Set Ukuran Kertas
+        $pdf->setPaper('A4', 'portrait');
+
+        // Download File
+        return $pdf->download('Tanda_Terima_Tabungan_'.date('d-m-Y').'.pdf');
     }
 }
