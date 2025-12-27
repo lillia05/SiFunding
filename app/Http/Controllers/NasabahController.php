@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\NasabahExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Nasabah;
 use App\Models\User;
 use App\Models\PengajuanRek;
@@ -28,7 +30,18 @@ class NasabahController extends Controller
             });
         }
 
-        $nasabah = $query->latest()->paginate(10);
+        if ($request->filled('produk')) {
+            $query->whereHas('pengajuan', function($q) use ($request) {
+                $q->where('jenis_produk', $request->produk);
+            });
+        }
+
+        $perPage = $request->input('per_page', 10);
+        
+        $nasabah = $query->latest()->paginate($perPage);
+
+        $nasabah->appends($request->all());
+
         return view('funding.nasabah.index', compact('nasabah'));
     }
 
@@ -248,5 +261,9 @@ class NasabahController extends Controller
         return redirect()->back()->with('success', 'Data nasabah telah dihapus.');
     }
 
+    public function export() 
+    {
+        return Excel::download(new NasabahExport, 'data_nasabah_' . date('d-m-Y_H-i') . '.xlsx');
+    }
 
 }

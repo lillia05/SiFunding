@@ -28,6 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 1. Menampilkan Tabel (Index)
     Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
 
+    // Export Excel
+    Route::get('/funding/nasabah/export-excel', [NasabahController::class, 'export'])->name('nasabah.export');
+
     // 2. Form Input (Create) & Simpan (Store)
     Route::get('/funding/nasabah/create', [NasabahController::class, 'create'])->name('nasabah.create');
     Route::post('/funding/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
