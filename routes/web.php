@@ -26,6 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- DATA NASABAH ---
     Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
+    // CRUD Nasabah
+    Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
+    Route::post('/funding/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
+    Route::put('/funding/nasabah/{id}', [NasabahController::class, 'update'])->name('nasabah.update');
+    Route::delete('/funding/nasabah/{id}', [NasabahController::class, 'destroy'])->name('nasabah.destroy');
+
 
     // --- TRACKING BERKAS ---
     Route::get('/funding/tracking', function () {
