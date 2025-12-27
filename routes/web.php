@@ -25,15 +25,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // --- DATA NASABAH ---
-    // Menampilkan tabel
     Route::get('/funding/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
-    // Menampilkan Form Input (TAMBAHKAN INI)
     Route::get('/funding/nasabah/create', [NasabahController::class, 'create'])->name('nasabah.create');
-    // Proses Simpan Data
     Route::post('/funding/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
+
+    Route::get('/funding/nasabah/{id}', [NasabahController::class, 'show'])->name('nasabah.show'); 
     Route::put('/funding/nasabah/{id}', [NasabahController::class, 'update'])->name('nasabah.update');
     Route::delete('/funding/nasabah/{id}', [NasabahController::class, 'destroy'])->name('nasabah.destroy');
-
+    
     // --- TRACKING BERKAS ---
     Route::get('/funding/tracking', function () {
         // Memanggil file resources/views/funding/tracking/index.blade.php
