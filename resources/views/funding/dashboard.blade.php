@@ -9,7 +9,7 @@
 
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-center">
             <div class="text-white mb-4 md:mb-0">
-                <h1 class="text-3xl font-heading font-bold">Selamat Pagi, Funding Officer!</h1>
+                <h1 class="text-3xl font-heading font-bold">Selamat Datang, Funding Officer!</h1>
                 <p class="mt-2 text-teal-100 text-sm md:text-base">Siap melayani nasabah hari ini? Berikut ringkasan aktivitas distribusi buku tabungan.</p>
             </div>
             <div class="text-white text-right">

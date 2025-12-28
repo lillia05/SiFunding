@@ -11,6 +11,21 @@
             <p class="text-gray-500 mt-1">Kelola data diri, foto profil, dan preferensi keamanan akun Anda.</p>
         </div>
 
+        {{-- ALERT SUKSES (Logic dari ProfileController) --}}
+        @if (session('status') === 'profile-updated')
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)" class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl shadow-sm flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span>Data profil berhasil diperbarui.</span>
+            </div>
+        @endif
+
+        @if (session('status') === 'password-updated')
+            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)" class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl shadow-sm flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span>Password berhasil diubah.</span>
+            </div>
+        @endif
+
         <div class="flex flex-col lg:flex-row gap-8">
             
             <div class="lg:w-1/3">
@@ -23,25 +38,45 @@
                     
                     <div class="px-6 pb-8 relative text-center">
                         <div class="relative -mt-16 mb-4 inline-block group">
-                            <div class="h-32 w-32 rounded-full border-4 border-white bg-white shadow-md flex items-center justify-center overflow-hidden relative">
-                                <span class="text-4xl font-bold text-bsi-teal select-none">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
-                                </span>
-                                
-                                <label for="photo_input" class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                </label>
-                            </div>
-
-                            <label for="photo_input" class="absolute bottom-1 right-1 bg-bsi-orange text-white p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-orange-600 transition transform hover:scale-110 border-2 border-white">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </label>
                             
-                            <input type="file" id="photo_input" class="hidden" accept="image/*">
+                            {{-- Form Upload Foto (Otomatis Submit saat file dipilih) --}}
+                            <form id="avatar-upload-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('patch')
+                                
+                                {{-- TAMBAHAN: Hidden Inputs agar validasi Controller lolos --}}
+                                {{-- Kita kirimkan data username & email yang sekarang ada di database --}}
+                                <input type="hidden" name="username" value="{{ old('username', $user->username) }}">
+                                <input type="hidden" name="email" value="{{ old('email', $user->email) }}">
+                                
+                                {{-- Input File Tersembunyi --}}
+                                <input type="file" id="avatar_input" name="avatar" class="hidden" accept="image/*" onchange="document.getElementById('avatar-upload-form').submit()">
+                                
+                                {{-- Container Foto --}}
+                                <div class="h-32 w-32 rounded-full border-4 border-white bg-white shadow-md flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="document.getElementById('avatar_input').click()">
+                                    @if($user->avatar)
+                                        <img src="{{ asset('storage/' . $user->avatar) }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-4xl font-bold text-bsi-teal select-none uppercase">
+                                            {{ substr($user->username ?? $user->name, 0, 1) }}
+                                        </span>
+                                    @endif
+
+                                    {{-- Overlay Hitam saat hover --}}
+                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    </div>
+                                </div>
+                            </form>
+
+                            {{-- Tombol Edit Kecil (Juga memicu input file) --}}
+                            <button type="button" onclick="document.getElementById('avatar_input').click()" class="absolute bottom-1 right-1 bg-bsi-orange text-white p-2.5 rounded-full shadow-lg hover:bg-orange-600 transition transform hover:scale-110 border-2 border-white">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
                         </div>
 
-                        <h2 class="text-xl font-heading font-bold text-gray-800">{{ Auth::user()->name }}</h2>
-                        <p class="text-sm text-gray-500 font-medium">{{ '@' . (Auth::user()->username ?? strtolower(str_replace(' ', '', Auth::user()->name))) }}</p>
+                        <h2 class="text-xl font-heading font-bold text-gray-800">{{ Auth::user()->name ?? Auth::user()->username }}</h2>
+                        <p class="text-sm text-gray-500 font-medium">{{ Auth::user()->email }}</p>
                         
                         <div class="mt-6 border-t border-gray-100 pt-4 text-left space-y-3">
                             <div class="flex items-center justify-between text-sm">
@@ -50,15 +85,17 @@
                             </div>
                             <div class="flex items-center justify-between text-sm">
                                 <span class="text-gray-500">Bergabung Sejak</span>
-                                <span class="font-medium text-gray-700">{{ Auth::user()->created_at->format('d F Y') }}</span>
+                                <span class="font-medium text-gray-700">{{ $user->created_at->format('d F Y') }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {{-- KOLOM KANAN: FORM EDIT --}}
             <div class="lg:w-2/3 space-y-8">
                 
+                {{-- 1. FORM EDIT PROFIL (NAMA & EMAIL) --}}
                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 relative">
                     <div class="flex items-center mb-8 pb-4 border-b border-gray-100">
                         <div class="p-3 bg-teal-50 rounded-xl text-bsi-teal mr-4">
@@ -66,7 +103,7 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-gray-800">Detail Akun</h3>
-                            <p class="text-sm text-gray-500">Perbarui username dan informasi kontak Anda.</p>
+                            <p class="text-sm text-gray-500">Perbarui nama lengkap dan alamat email Anda.</p>
                         </div>
                     </div>
 
@@ -74,41 +111,46 @@
                         @csrf
                         @method('patch')
 
+                        {{-- Input Nama --}}
                         <div>
-                            <label for="username" class="block text-sm font-bold text-gray-700 mb-2">Username</label>
+                            <label for="username" class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap</label>
+                            {{-- PENTING: name="name" bukan "username" agar sesuai dengan $request->user()->fill() bawaan Breeze --}}
                             <input type="text" id="username" name="username" 
                                 class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal transition-all duration-200 outline-none placeholder-gray-400"
-                                value="{{ old('username', Auth::user()->username) }}" 
-                                required autocomplete="username" 
-                                placeholder="Masukkan username">
+                                value="{{ old('username', $user->username) }}" 
+                                required autofocus autocomplete="username">
                             @error('username') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
+                        {{-- Input Email --}}
                         <div>
                             <label for="email" class="block text-sm font-bold text-gray-700 mb-2">Alamat Email</label>
                             <input type="email" id="email" name="email" 
                                 class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal transition-all duration-200 outline-none placeholder-gray-400"
-                                value="{{ old('email', Auth::user()->email) }}" 
-                                required autocomplete="email" 
-                                placeholder="contoh@bsi.co.id">
+                                value="{{ old('email', $user->email) }}" 
+                                required autocomplete="username">
                             @error('email') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+
+                            {{-- Verifikasi Email (Jika perlu) --}}
+                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                                <div class="mt-2 text-sm text-gray-800">
+                                    Email Anda belum diverifikasi.
+                                    <button form="send-verification" class="underline text-bsi-teal hover:text-teal-800">
+                                        Klik untuk kirim ulang verifikasi.
+                                    </button>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex items-center gap-4 pt-4">
                             <button type="submit" class="px-6 py-3 bg-bsi-teal text-white font-bold rounded-xl shadow-md hover:bg-teal-700 hover:shadow-lg focus:ring-4 focus:ring-teal-200 transition-all transform hover:-translate-y-0.5">
                                 Simpan Perubahan
                             </button>
-
-                            @if (session('status') === 'profile-updated')
-                                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-green-600 font-medium flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    Berhasil disimpan.
-                                </p>
-                            @endif
                         </div>
                     </form>
                 </div>
 
+                {{-- 2. FORM GANTI PASSWORD --}}
                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
                     <div class="flex items-center mb-8 pb-4 border-b border-gray-100">
                         <div class="p-3 bg-orange-50 rounded-xl text-bsi-orange mr-4">
@@ -127,9 +169,9 @@
                         <div>
                             <label for="current_password" class="block text-sm font-bold text-gray-700 mb-2">Kata Sandi Saat Ini</label>
                             <input type="password" id="current_password" name="current_password" 
-                                class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none placeholder-gray-400"
-                                autocomplete="current-password" 
-                                placeholder="Masukkan kata sandi lama">
+                                class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none"
+                                autocomplete="current-password" placeholder="Masukkan kata sandi lama">
+                            {{-- Error Bag khusus updatePassword --}}
                             @error('current_password', 'updatePassword') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
@@ -137,18 +179,16 @@
                             <div>
                                 <label for="password" class="block text-sm font-bold text-gray-700 mb-2">Kata Sandi Baru</label>
                                 <input type="password" id="password" name="password" 
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none placeholder-gray-400"
-                                    autocomplete="new-password" 
-                                    placeholder="Minimal 8 karakter">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none"
+                                    autocomplete="new-password" placeholder="Minimal 8 karakter">
                                 @error('password', 'updatePassword') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
                                 <label for="password_confirmation" class="block text-sm font-bold text-gray-700 mb-2">Konfirmasi Kata Sandi</label>
                                 <input type="password" id="password_confirmation" name="password_confirmation" 
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none placeholder-gray-400"
-                                    autocomplete="new-password" 
-                                    placeholder="Ulangi kata sandi baru">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-bsi-orange focus:border-bsi-orange transition-all duration-200 outline-none"
+                                    autocomplete="new-password" placeholder="Ulangi kata sandi baru">
                                 @error('password_confirmation', 'updatePassword') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -157,17 +197,11 @@
                             <button type="submit" class="px-6 py-3 bg-bsi-orange text-white font-bold rounded-xl shadow-md hover:bg-orange-500 hover:shadow-lg focus:ring-4 focus:ring-orange-200 transition-all transform hover:-translate-y-0.5">
                                 Update Kata Sandi
                             </button>
-
-                            @if (session('status') === 'password-updated')
-                                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-green-600 font-medium flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    Password berhasil diubah.
-                                </p>
-                            @endif
                         </div>
                     </form>
                 </div>
 
+                {{-- 3. HAPUS AKUN --}}
                 <div class="bg-red-50/50 p-8 rounded-2xl shadow-sm border border-red-100">
                     <div class="flex items-start justify-between">
                         <div>
@@ -182,11 +216,13 @@
                     </div>
                     
                     <div class="mt-6">
+                        {{-- Tombol Trigger Modal --}}
                         <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')" 
                             class="px-5 py-2.5 bg-red-600 text-white font-bold rounded-xl shadow hover:bg-red-700 transition focus:outline-none focus:ring-4 focus:ring-red-200">
                             Hapus Akun Saya
                         </button>
 
+                        {{-- Modal Konfirmasi --}}
                         <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
                             <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
                                 @csrf
@@ -202,11 +238,10 @@
 
                                 <div class="mt-6">
                                     <label for="password" class="sr-only">Kata Sandi</label>
-
                                     <input id="password" name="password" type="password" 
                                         class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 outline-none"
                                         placeholder="Masukkan Kata Sandi Anda" />
-
+                                    {{-- Error Bag khusus userDeletion --}}
                                     @error('password', 'userDeletion') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
@@ -227,5 +262,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('avatar-preview');
+            const initial = document.getElementById('avatar-initial');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden'); 
+                    if(initial) initial.classList.add('hidden'); 
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
 @endsection
