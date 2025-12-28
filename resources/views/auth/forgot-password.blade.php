@@ -20,7 +20,7 @@
                               transition duration-200 sm:text-sm placeholder-gray-400" 
                        type="email" 
                        name="email" 
-                       :value="old('email')" 
+                       value="{{ old('email') }}" 
                        required autofocus 
                        placeholder="contoh: nama@bsi.co.id" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -34,6 +34,9 @@
 
             <div class="text-center mt-6">
                 <a href="{{ route('login') }}" class="inline-flex items-center text-sm font-medium text-bsi-teal hover:text-bsi-dark hover:underline transition-colors group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
                     Kembali ke Halaman Login
                 </a>
             </div>

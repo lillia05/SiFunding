@@ -100,7 +100,7 @@
                             @if (Route::has('password.request'))
                                 <div class="text-sm">
                                     <a href="{{ route('password.request') }}" class="font-medium text-bsi-teal hover:text-bsi-dark">
-                                        Lupa password?
+                                        Lupa kata sandi?
                                     </a>
                                 </div>
                             @endif
