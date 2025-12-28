@@ -27,6 +27,9 @@ class NasabahController extends Controller
                 $q->where('nik_ktp', 'like', "%$search%")
                   ->orWhereHas('user', function($userQuery) use ($search) {
                       $userQuery->where('username', 'like', "%$search%"); 
+                  })
+                  ->orWhereHas('pengajuan', function($pengajuanQuery) use ($search) {
+                      $pengajuanQuery->where('no_rek', 'like', "%$search%"); 
                   });
             });
         }

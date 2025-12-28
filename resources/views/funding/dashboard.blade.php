@@ -82,7 +82,7 @@
     <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
         <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-heading font-semibold text-gray-800">Aktivitas Terbaru</h3>
-            <a href="#" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya</a>
+            <a href="{{ route('tracking.index') }}" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya</a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
@@ -117,11 +117,11 @@
                                 {{ strtoupper($item->status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        {{-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a href="#" class="text-gray-400 hover:text-bsi-teal">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </a>
-                        </td>
+                        </td> --}}
                     </tr>
                     @empty
                     <tr>

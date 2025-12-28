@@ -202,8 +202,34 @@
             </table>
         </div>
 
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-            {{ $pengajuans->links() }}
+        <div class="bg-gray-50 px-4 py-3 border-t border-gray-200 sm:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                    <p class="text-sm text-gray-700 text-center sm:text-left">
+                        Menampilkan <span class="font-medium">{{ $pengajuans->firstItem() }}</span> 
+                        sampai <span class="font-medium">{{ $pengajuans->lastItem() }}</span> 
+                        dari <span class="font-medium">{{ $pengajuans->total() }}</span> data
+                    </p>
+
+                    <form action="{{ route('tracking.index') }}" method="GET" class="flex items-center">
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                        <input type="hidden" name="status" value="{{ request('status') }}">
+
+                        <select name="per_page" class="ml-0 sm:ml-2 border-gray-300 rounded-md text-sm focus:ring-bsi-teal focus:border-bsi-teal py-1.5 pl-2 pr-8 cursor-pointer" onchange="this.form.submit()">
+                            <option value="10" {{ request('per_page') == '10' ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('per_page') == '100' ? 'selected' : '' }}>100</option>
+                        </select>
+                        <span class="text-sm text-gray-500 ml-2">baris per halaman</span>
+                    </form>
+                </div>
+
+                <div class="w-full md:w-auto flex justify-center md:justify-end">
+                    {{ $pengajuans->appends(request()->query())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 

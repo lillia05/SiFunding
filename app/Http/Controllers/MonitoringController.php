@@ -8,7 +8,7 @@ use App\Models\PengajuanRek;
 use App\Models\StatusLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf; // IMPORT LIBRARY PDF
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 class MonitoringController extends Controller
 {
@@ -53,6 +53,12 @@ class MonitoringController extends Controller
         }
 
         $pengajuans = $query->latest()->paginate(10);
+
+        $perPage = $request->input('per_page', 10);
+        
+        $pengajuans = $query->latest()->paginate($perPage);
+
+        $pengajuans->appends($request->all());
 
         return view('funding.tracking.index', compact('pengajuans'));
     }
@@ -120,24 +126,18 @@ class MonitoringController extends Controller
         return view('funding.tracking.show', compact('pengajuan'));
     }
 
-    // --- FUNGSI CETAK PDF (BARU) ---
     public function cetakPdf()
     {
-        // Ambil data nasabah yang statusnya 'ready' (Siap Diserahkan) atau 'done' (Selesai)
-        // Agar tanda terima hanya untuk yang sudah dicetak bukunya
         $data_nasabah = Nasabah::with(['user', 'pengajuan'])
                         ->whereHas('pengajuan', function($q) {
                             $q->whereIn('status', ['ready', 'done']);
                         })
                         ->get();
 
-        // Load View PDF
         $pdf = Pdf::loadView('funding.tracking.pdf', compact('data_nasabah'));
 
-        // Set Ukuran Kertas
         $pdf->setPaper('A4', 'portrait');
 
-        // Download File
         return $pdf->download('Tanda_Terima_Tabungan_'.date('d-m-Y').'.pdf');
     }
 }
