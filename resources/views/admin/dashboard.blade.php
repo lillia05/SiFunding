@@ -10,7 +10,16 @@
     <div class="bg-white p-10 rounded-lg shadow-lg text-center">
         <h1 class="text-3xl font-bold text-red-600 mb-4">Ini Halaman Admin</h1>
         <p class="text-gray-600 mb-6">Hanya dapat diakses oleh Administrator Sistem.</p>
-        <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Logout (Kembali ke Login)</a>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <a href="{{ route('logout') }}" 
+               onclick="event.preventDefault(); this.closest('form').submit();" 
+               class="text-blue-500 hover:underline cursor-pointer">
+                Logout (Kembali ke Login)
+            </a>
+        </form>
+
     </div>
 </body>
 </html>

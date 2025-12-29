@@ -19,7 +19,26 @@ Route::get('/', function () {
 // 2. Group Route yang butuh Login
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // --- LOGIKA REDIRECT DASHBOARD (PENTING) ---
+    // Route ini menangani jika ada link yang mengarah ke "/dashboard" biasa (misal dari logo aplikasi)
+    // Fungsinya mengecek role user dan melempar ke dashboard yang benar.
+    Route::get('/dashboard', function () {
+        if (auth()->user()->username === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('funding.dashboard');
+    })->name('dashboard');
+
+
+    // --- DASHBOARD ADMIN ---
+    // Ini halaman khusus Admin
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard'); 
+    })->name('admin.dashboard');
+
+
     // --- DASHBOARD FUNDING ---
+    // Ini halaman khusus Funding Officer
     Route::get('/funding/dashboard', [MonitoringController::class, 'index'])->name('funding.dashboard');
 
 
@@ -58,7 +77,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- (Route Cetak PDF) ---
     Route::get('/funding/tracking/cetak-tanda-terima', [MonitoringController::class, 'cetakPdf'])->name('tracking.print');
-    // Route Cetak SATUAN (TAMBAHKAN INI)
+    
+    // Route Cetak SATUAN
     Route::get('/funding/tracking/cetak-tanda-terima/{id}', [MonitoringController::class, 'cetakPdfDetail'])->name('tracking.print.detail');
 
 
