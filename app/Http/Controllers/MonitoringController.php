@@ -126,6 +126,7 @@ class MonitoringController extends Controller
         return view('funding.tracking.show', compact('pengajuan'));
     }
 
+    //Cetak tanda terima yang di beranda tracking
     public function cetakPdf()
     {
         $data_nasabah = Nasabah::with(['user', 'pengajuan'])
@@ -139,5 +140,25 @@ class MonitoringController extends Controller
         $pdf->setPaper('A4', 'portrait');
 
         return $pdf->download('Tanda_Terima_Tabungan_'.date('d-m-Y').'.pdf');
+    }
+
+    //Cetak tanda terima yang di show tracking (satuan)
+    public function cetakPdfDetail($id)
+    {
+        // 1. Ambil data pengajuan spesifik berdasarkan ID
+        $pengajuan = PengajuanRek::with(['nasabah.user'])->findOrFail($id);
+
+        // 2. Ambil data nasabah dari pengajuan tersebut
+        // Kita bungkus dengan 'collect' agar jadi array/collection (karena view PDF pake loop foreach)
+        $data_nasabah = collect([$pengajuan->nasabah]);
+
+        // 3. Load View PDF yang SAMA dengan data yang cuma 1 biji tadi
+        $pdf = Pdf::loadView('funding.tracking.pdf', compact('data_nasabah'));
+        $pdf->setPaper('A4', 'portrait');
+
+        // 4. Buat nama file unik (misal pake nama nasabah)
+        $namaFile = 'Tanda_Terima_' . str_replace(' ', '_', $pengajuan->nasabah->user->name) . '.pdf';
+
+        return $pdf->download($namaFile);
     }
 }

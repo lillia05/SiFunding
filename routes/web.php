@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --- (Route Cetak PDF) ---
     Route::get('/funding/tracking/cetak-tanda-terima', [MonitoringController::class, 'cetakPdf'])->name('tracking.print');
+    // Route Cetak SATUAN (TAMBAHKAN INI)
+    Route::get('/funding/tracking/cetak-tanda-terima/{id}', [MonitoringController::class, 'cetakPdfDetail'])->name('tracking.print.detail');
 
 
     // ================= PROFILE =================
