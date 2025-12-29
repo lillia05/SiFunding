@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
+// Import Models agar bisa dipakai di route closure (Dashboard Admin)
+use App\Models\Nasabah;
+use App\Models\PengajuanRek;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +22,8 @@ Route::get('/', function () {
 // 2. Group Route yang butuh Login
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // --- LOGIKA REDIRECT DASHBOARD (PENTING) ---
-    // Route ini menangani jika ada link yang mengarah ke "/dashboard" biasa (misal dari logo aplikasi)
-    // Fungsinya mengecek role user dan melempar ke dashboard yang benar.
+    // --- LOGIKA REDIRECT DASHBOARD ---
+    // Route ini menangani jika ada link yang mengarah ke "/dashboard" biasa
     Route::get('/dashboard', function () {
         if (auth()->user()->username === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -30,14 +32,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
 
-    // --- DASHBOARD ADMIN ---
-    // Ini halaman khusus Admin
+    // ================= DASHBOARD ADMIN =================
+    
+    // 1. Halaman Utama Dashboard Admin
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard'); 
+        // Kita perlu mengirim data statistik agar tampilan Dashboard Admin tidak error
+        // (Karena view-nya hasil copy dari Dashboard Funding yang butuh variabel ini)
+        return view('admin.dashboard', [
+            'totalNasabah'   => Nasabah::count(),
+            'pendingCount'   => PengajuanRek::whereIn('status', ['draft', 'process'])->count(),
+            'readyCount'     => PengajuanRek::where('status', 'ready')->count(),
+            'doneCount'      => PengajuanRek::where('status', 'done')->count(),
+            'antreanTerbaru' => PengajuanRek::with('nasabah.user')->latest()->take(5)->get()
+        ]); 
     })->name('admin.dashboard');
 
+    // 2. Halaman Manajemen Akun (Route Baru)
+    Route::get('/admin/manajemen-akun', function () {
+        return "Halaman Manajemen Akun (Akan Dibuat)"; // Nanti kita buat Controller & View-nya
+    })->name('admin.akun.index');
 
-    // --- DASHBOARD FUNDING ---
+
+    // ================= DASHBOARD FUNDING =================
     // Ini halaman khusus Funding Officer
     Route::get('/funding/dashboard', [MonitoringController::class, 'index'])->name('funding.dashboard');
 

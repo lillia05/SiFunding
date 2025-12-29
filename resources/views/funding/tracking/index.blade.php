@@ -34,7 +34,7 @@
             </div>
             <select name="status" class="block w-full md:w-48 pl-3 pr-8 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal bg-white text-gray-700">
                 <option value="">Semua Progress</option>
-                 <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                 <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Menunggu Cetak</option>
                 <option value="ready" {{ request('status') == 'ready' ? 'selected' : '' }}>Siap Diserahkan</option>
                 <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Selesai</option>
@@ -89,7 +89,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             @if($item->status == 'draft' || $item->status == 'process')
                                 <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-printing-{{ $item->id }}')"
-                                    class="text-blue-600 border border-blue-200 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition font-semibold">
+                                    class="text-blue-600 border border-blue-200 bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100 transition text-xs font-bold">
                                     Update Progress
                                 </button>
                             @elseif($item->status == 'ready')
