@@ -22,6 +22,14 @@ class DemoDataSeeder extends Seeder
             'email_verified_at' => now(), 
         ]);
 
+        $admin = User::create([
+            'username' => 'admin',
+            'email' => 'admin@bsi.com',
+            'password' => Hash::make('admin123@'),
+            'role' => 'Admin',
+            'email_verified_at' => now(), 
+        ]);
+
         $dataPendaftar = [
             [
                 'username' => 'fauzi99',
