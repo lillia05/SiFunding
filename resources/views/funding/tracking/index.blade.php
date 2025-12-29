@@ -34,6 +34,7 @@
             </div>
             <select name="status" class="block w-full md:w-48 pl-3 pr-8 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal bg-white text-gray-700">
                 <option value="">Semua Progress</option>
+                 <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                 <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Menunggu Cetak</option>
                 <option value="ready" {{ request('status') == 'ready' ? 'selected' : '' }}>Siap Diserahkan</option>
                 <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Selesai</option>

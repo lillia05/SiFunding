@@ -9,7 +9,7 @@
 
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-center">
             <div class="text-white mb-4 md:mb-0">
-                <h1 class="text-3xl font-heading font-bold">Selamat Datang, Funding Officer!</h1>
+                <h1 class="text-3xl font-heading font-bold">Selamat Datang, {{ auth()->user()->name ?? auth()->user()->username }}!</h1>
                 <p class="mt-2 text-teal-100 text-sm md:text-base">Siap melayani nasabah hari ini? Berikut ringkasan aktivitas distribusi buku tabungan.</p>
             </div>
             <div class="text-white text-right">
@@ -41,7 +41,7 @@
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Menunggu Cetak</p>
                     <p class="text-3xl font-bold text-yellow-600 mt-2">{{ $pendingCount }}</p>
-                    <p class="text-xs text-yellow-600 mt-2 bg-yellow-50 inline-block px-2 py-1 rounded">Pending</p>
+                    <p class="text-xs text-yellow-600 mt-2 bg-yellow-50 inline-block px-2 py-1 rounded">Menunggu Cetak</p>
                 </div>
                 <div class="p-3 bg-yellow-50 rounded-lg text-yellow-500">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -55,7 +55,7 @@
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Siap Diserahkan</p>
                     <p class="text-3xl font-bold text-blue-600 mt-2">{{ $readyCount }}</p>
-                    <p class="text-xs text-blue-600 mt-2 bg-blue-50 inline-block px-2 py-1 rounded">Ready</p>
+                    <p class="text-xs text-blue-600 mt-2 bg-blue-50 inline-block px-2 py-1 rounded">Siap Diserahkan</p>
                 </div>
                 <div class="p-3 bg-blue-50 rounded-lg text-blue-500">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
@@ -69,7 +69,7 @@
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Sudah Diserahkan</p>
                     <p class="text-3xl font-bold text-bsi-teal mt-2">{{ $doneCount }}</p>
-                    <p class="text-xs text-teal-700 mt-2 bg-teal-50 inline-block px-2 py-1 rounded">Done</p>
+                    <p class="text-xs text-teal-700 mt-2 bg-teal-50 inline-block px-2 py-1 rounded">Selesai</p>
                 </div>
                 <div class="p-3 bg-teal-50 rounded-lg text-bsi-teal">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -89,9 +89,9 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Nasabah</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Layanan</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Jenis Produk</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Waktu</th>
-                        <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Progress</th>
                         <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider"></th>
                     </tr>
                 </thead>
@@ -117,11 +117,6 @@
                                 {{ strtoupper($item->status) }}
                             </span>
                         </td>
-                        {{-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="#" class="text-gray-400 hover:text-bsi-teal">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </a>
-                        </td> --}}
                     </tr>
                     @empty
                     <tr>
