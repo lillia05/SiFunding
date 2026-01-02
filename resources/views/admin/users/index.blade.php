@@ -8,12 +8,14 @@
     <div class="flex flex-col md:flex-row justify-between items-center mb-8">
         <div>
             <h1 class="text-2xl font-bold text-gray-800 font-heading">Daftar Pengguna</h1>
-            <p class="text-sm text-gray-500">Kelola akun admin, funding officer, dan nasabah.</p>
+            <p class="text-sm text-gray-500">Kelola akun admin dan funding officer.</p>
         </div>
-        <button class="flex items-center px-5 py-2.5 bg-bsi-teal text-white text-sm font-medium rounded-xl hover:bg-teal-700 transition shadow-sm mt-4 md:mt-0">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Tambah User
-        </button>
+        <div>
+            <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 bg-bsi-orange text-white rounded-lg text-sm font-bold shadow-md hover:bg-yellow-600 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Tambah Akun Baru
+            </a>
+        </div>
     </div>
 
     {{-- CARD TABEL --}}

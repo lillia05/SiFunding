@@ -33,36 +33,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // ================= DASHBOARD ADMIN =================
-    
-    // 1. Halaman Utama Dashboard Admin
-    // ================= DASHBOARD ADMIN =================
-    
-    // Group khusus Admin agar semua URL depannya '/admin'
     Route::prefix('admin')->name('admin.')->group(function () {
         
         // 1. Dashboard Admin
         Route::get('/dashboard', function () {
             return view('admin.dashboard', [
-                // Mengirim data statistik yang sama
                 'totalNasabah'   => Nasabah::count(),
                 'pendingCount'   => PengajuanRek::whereIn('status', ['draft', 'process'])->count(),
                 'readyCount'     => PengajuanRek::where('status', 'ready')->count(),
                 'doneCount'      => PengajuanRek::where('status', 'done')->count(),
                 'antreanTerbaru' => PengajuanRek::with('nasabah.user')->latest()->take(5)->get()
             ]); 
-        })->name('dashboard'); // Jadi: route('admin.dashboard')
+        })->name('dashboard');
 
-        // 2. Manajemen Akun (Yang sudah kita buat)
+        // 2. Manajemen Akun (List User)
         Route::get('/users', function () {
-            $users = \App\Models\User::all(); // Ambil data user asli
+            $users = \App\Models\User::all();
             return view('admin.users.index', compact('users'));
-        })->name('users.index'); // Jadi: route('admin.users.index')
+        })->name('users.index');
 
-        // 3. Data Nasabah (Versi Admin)
-        // Kita arahkan ke Controller yang sama, tapi URL-nya beda
+        // [BARU] 3. Halaman Tambah User (Create)
+        Route::get('/users/create', function () {
+            return view('admin.users.create');
+        })->name('users.create'); // <--- INI YANG TADI HILANG
+
+        // [BARU] 4. Proses Simpan User (Store) - Dummy
+        Route::post('/users', function () {
+            // Nanti di sini logika simpan ke database
+            return redirect()->route('admin.users.index');
+        })->name('users.store'); // <--- INI JUGA PENTING
+
+        // 5. Data Nasabah (Versi Admin)
         Route::get('/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
 
-        // 4. Tracking / Distribusi (Versi Admin)
+        // 6. Tracking / Distribusi (Versi Admin)
         Route::get('/tracking', [MonitoringController::class, 'trackingPage'])->name('tracking.index');
     });
 
