@@ -80,6 +80,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return view('admin.users.show', compact('user'));
         })->name('users.show');
 
+        // [BARU] 6. Halaman Edit User
+        Route::get('/users/{id}/edit', function ($id) {
+            // Cari user atau pakai dummy jika tidak ada di DB (untuk preview)
+            $user = \App\Models\User::find($id) ?? new \App\Models\User([
+                'id' => $id,
+                'name' => 'User Demo',
+                'username' => 'user_demo',
+                'email' => 'demo@bsi.co.id',
+                'role' => 'funding_officer',
+                'created_at' => now(),
+            ]);
+            return view('admin.users.edit', compact('user'));
+        })->name('users.edit');
+
+        // [BARU] 7. Proses Update User (Update)
+        Route::put('/users/{id}', function ($id) {
+            // Logika update ke database nanti disini
+            return redirect()->route('admin.users.index');
+        })->name('users.update');
+
         // 5. Data Nasabah (Versi Admin)
         Route::get('/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
 
