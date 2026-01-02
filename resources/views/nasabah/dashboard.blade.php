@@ -121,17 +121,17 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap (Sesuai KTP)</label>
                                     {{-- Readonly karena nasabah login --}}
-                                    <input type="text" name="username" value="{{ auth()->user()->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" readonly>
+                                    <input type="text" name="username" value="{{ auth()->user()->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" placeholder="Masukkan nama lengkap Anda" readonly>
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Email</label>
-                                    <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" readonly>
+                                    <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" placeholder="Contoh: nasabah@gmail.com">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-2">Rekening BSI Lama <span class="text-gray-400 font-normal">(Opsional)</span></label>
-                                    <input type="number" name="rek_bsi_lama" value="{{ old('rek_bsi_lama') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white" placeholder="Nomor rekening jika ada">
+                                    <input type="number" name="rek_bsi_lama" value="{{ old('rek_bsi_lama') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white" placeholder="Nomor rekening lama jika ada">
                                 </div>
 
                                 <div class="md:col-span-2">
