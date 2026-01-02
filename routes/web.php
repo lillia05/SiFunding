@@ -61,7 +61,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/users', function () {
             // Nanti di sini logika simpan ke database
             return redirect()->route('admin.users.index');
-        })->name('users.store'); // <--- INI JUGA PENTING
+        })->name('users.store'); 
+
+        // [BARU] 5. Halaman Lihat Detail User (Show)
+        Route::get('/users/{id}', function ($id) {
+            // Mengambil data user berdasarkan ID
+            // Jika data tidak ketemu (misal untuk demo), kita buat data dummy
+            $user = \App\Models\User::find($id) ?? new \App\Models\User([
+                'id' => $id,
+                'name' => 'Contoh User Admin',
+                'username' => 'admin_demo',
+                'email' => 'admin@sifunding.com',
+                'role' => 'admin',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            return view('admin.users.show', compact('user'));
+        })->name('users.show');
 
         // 5. Data Nasabah (Versi Admin)
         Route::get('/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
