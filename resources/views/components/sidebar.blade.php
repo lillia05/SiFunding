@@ -1,4 +1,4 @@
-<aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-10">
+<aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-10 min-h-screen">
     <div class="h-20 flex items-center px-6 border-b border-gray-100">
         <img class="h-10 w-auto" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg" alt="Logo BSI">
     </div>
@@ -7,52 +7,71 @@
         
         <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Menu Utama</p>
         
-        {{-- 1. DASHBOARD (Semua User) --}}
-        <a href="{{ route('dashboard') }}" 
+        {{-- LOGIKA ROUTE DINAMIS --}}
+        @php
+            $isAdmin = auth()->user()->username === 'admin';
+            
+            // Tentukan link berdasarkan role
+            $dashboardRoute = $isAdmin ? route('admin.dashboard') : route('funding.dashboard');
+            
+            // Cek nama route admin (pakai prefix 'admin.') atau route biasa
+            $nasabahRoute = $isAdmin ? route('admin.nasabah.index') : route('nasabah.index');
+            $trackingRoute = $isAdmin ? route('admin.tracking.index') : route('tracking.index');
+
+            // Logika Active State
+            $isDashboardActive = request()->routeIs('funding.dashboard') || request()->routeIs('admin.dashboard');
+            
+            // Cek active state pakai wildcard (*) biar kena semua sub-halaman
+            $isNasabahActive = request()->routeIs('nasabah.*') || request()->routeIs('admin.nasabah.*');
+            $isTrackingActive = request()->routeIs('tracking.*') || request()->routeIs('admin.tracking.*');
+        @endphp
+
+        {{-- 1. DASHBOARD --}}
+        <a href="{{ $dashboardRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all 
-           {{ request()->routeIs('funding.dashboard') || request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal shadow-sm border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
+           {{ $isDashboardActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal shadow-sm border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
             Dashboard
         </a>
 
-        {{-- 2. MANAJEMEN AKUN (Khusus Admin - Di Bawah Dashboard) --}}
-        @if(auth()->user()->username === 'admin')
-            <a href="{{ route('admin.akun.index') }}" 
+        {{-- 2. MANAJEMEN AKUN (Hanya Admin) --}}
+        @if($isAdmin)
+            <a href="{{ route('admin.users.index') }}" 
                class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
-               {{ request()->routeIs('admin.akun.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
+               {{ request()->routeIs('admin.users.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 Manajemen Akun
             </a>
         @endif
         
-        {{-- 3. DATA NASABAH (Semua User) --}}
-        <a href="{{ route('nasabah.index') }}" 
+        {{-- 3. DATA NASABAH (Link Dinamis) --}}
+        <a href="{{ $nasabahRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
-           {{ request()->routeIs('nasabah.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
+           {{ $isNasabahActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             Data Nasabah
         </a>
 
-        {{-- 4. DISTRIBUSI TABUNGAN (Semua User) --}}
-        <a href="{{ route('tracking.index') }}" 
+        {{-- 4. DISTRIBUSI TABUNGAN (Link Dinamis) --}}
+        <a href="{{ $trackingRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
-           {{ request()->routeIs('tracking.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
+           {{ $isTrackingActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
             Distribusi Tabungan
         </a>
 
         <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">Pengaturan</p>
 
-        {{-- 5. PROFIL SAYA (Semua User termasuk Admin) --}}
+        {{-- 5. PROFIL --}}
         <a href="{{ route('profile.edit') }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
            {{ request()->routeIs('profile.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             Profil Saya
         </a>
-
     </nav>
 
+    {{-- FOOTER SIDEBAR --}}
     <div class="border-t border-gray-100 p-4 bg-gray-50">
         <div class="flex items-center">
             <div class="h-10 w-10 rounded-full bg-bsi-teal flex items-center justify-center text-white font-bold shadow-md uppercase">

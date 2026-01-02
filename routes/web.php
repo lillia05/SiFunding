@@ -35,22 +35,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ================= DASHBOARD ADMIN =================
     
     // 1. Halaman Utama Dashboard Admin
-    Route::get('/admin/dashboard', function () {
-        // Kita perlu mengirim data statistik agar tampilan Dashboard Admin tidak error
-        // (Karena view-nya hasil copy dari Dashboard Funding yang butuh variabel ini)
-        return view('admin.dashboard', [
-            'totalNasabah'   => Nasabah::count(),
-            'pendingCount'   => PengajuanRek::whereIn('status', ['draft', 'process'])->count(),
-            'readyCount'     => PengajuanRek::where('status', 'ready')->count(),
-            'doneCount'      => PengajuanRek::where('status', 'done')->count(),
-            'antreanTerbaru' => PengajuanRek::with('nasabah.user')->latest()->take(5)->get()
-        ]); 
-    })->name('admin.dashboard');
+    // ================= DASHBOARD ADMIN =================
+    
+    // Group khusus Admin agar semua URL depannya '/admin'
+    Route::prefix('admin')->name('admin.')->group(function () {
+        
+        // 1. Dashboard Admin
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard', [
+                // Mengirim data statistik yang sama
+                'totalNasabah'   => Nasabah::count(),
+                'pendingCount'   => PengajuanRek::whereIn('status', ['draft', 'process'])->count(),
+                'readyCount'     => PengajuanRek::where('status', 'ready')->count(),
+                'doneCount'      => PengajuanRek::where('status', 'done')->count(),
+                'antreanTerbaru' => PengajuanRek::with('nasabah.user')->latest()->take(5)->get()
+            ]); 
+        })->name('dashboard'); // Jadi: route('admin.dashboard')
 
-    // 2. Halaman Manajemen Akun (Route Baru)
-    Route::get('/admin/manajemen-akun', function () {
-        return "Halaman Manajemen Akun (Akan Dibuat)"; // Nanti kita buat Controller & View-nya
-    })->name('admin.akun.index');
+        // 2. Manajemen Akun (Yang sudah kita buat)
+        Route::get('/users', function () {
+            $users = \App\Models\User::all(); // Ambil data user asli
+            return view('admin.users.index', compact('users'));
+        })->name('users.index'); // Jadi: route('admin.users.index')
+
+        // 3. Data Nasabah (Versi Admin)
+        // Kita arahkan ke Controller yang sama, tapi URL-nya beda
+        Route::get('/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
+
+        // 4. Tracking / Distribusi (Versi Admin)
+        Route::get('/tracking', [MonitoringController::class, 'trackingPage'])->name('tracking.index');
+    });
 
 
     // ================= DASHBOARD FUNDING =================

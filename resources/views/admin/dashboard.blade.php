@@ -76,7 +76,7 @@
         <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-heading font-semibold text-gray-800">Akun Terbaru</h3>
             {{-- Link ke Manajemen Akun untuk aksi lengkap --}}
-            <a href="{{ route('admin.akun.index') }}" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Manajemen Akun</a>
+            <a href="{{ route('admin.users.index') }}" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Manajemen Akun</a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">

@@ -7,7 +7,7 @@
     <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl font-heading font-bold text-gray-800">Data Nasabah</h1>
-            <p class="text-sm text-gray-500 mt-1">Database lengkap nasabah (Pengganti Excel).</p>
+            <p class="text-sm text-gray-500 mt-1">Database lengkap nasabah.</p>
         </div>
         
         <div class="flex flex-wrap gap-3">
