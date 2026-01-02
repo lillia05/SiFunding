@@ -23,32 +23,32 @@
         
         {{-- SEARCH & FILTER --}}
         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6">
-        <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            
-            <div class="md:col-span-2 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                
+                <div class="md:col-span-2 relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="hidden" name="per_page" value="{{ request('per_page', 10) }}">
+                    <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition" placeholder="Cari Username atau Email...">
                 </div>
-                <input type="hidden" name="per_page" value="{{ request('per_page', 10) }}">
-                <input type="text" name="search" value="{{ request('search') }}" class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm transition" placeholder="Cari Username atau Email...">
-            </div>
 
-            <div class="relative">
-                <select name="jabatan" class="block w-full pl-3 pr-8 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm cursor-pointer">
-                    <option value="">- Semua Jabatan -</option>
-                    <option value="funding">Funding Officer</option>
-                    <option value="admin">Administrator</option>
-                </select>
-            </div>
+                <div class="relative">
+                    <select name="jabatan" class="block w-full pl-3 pr-8 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal sm:text-sm cursor-pointer">
+                        <option value="">- Semua Jabatan -</option>
+                        <option value="funding">Funding Officer</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
 
-            <div class="relative">
-                <button type="submit" class="w-full bg-bsi-teal text-white py-2.5 rounded-lg text-sm font-medium hover:bg-teal-700 transition shadow-sm">
-                    Terapkan Filter
-                </button>
-            </div>
+                <div class="relative">
+                    <button type="submit" class="w-full bg-bsi-teal text-white py-2.5 rounded-lg text-sm font-medium hover:bg-teal-700 transition shadow-sm">
+                        Terapkan Filter
+                    </button>
+                </div>
 
-        </form>
-    </div>
+            </form>
+        </div>
 
         {{-- TABEL --}}
         <div class="overflow-x-auto">
@@ -60,6 +60,8 @@
                         <th class="px-6 py-4 text-left">Email</th>
                         <th class="px-6 py-4 text-left">Tanggal Daftar</th>
                         <th class="px-6 py-4 text-center">Jabatan</th>
+                        {{-- [BARU] Kolom Status --}}
+                        <th class="px-6 py-4 text-center">Status</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -98,30 +100,46 @@
                             @endif
                         </td>
 
-                        {{-- 6. AKSI (Ikon) --}}
+                        {{-- [BARU] 6. STATUS (Sebelum Aksi) --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            {{-- Cek kolom is_active (default true/1 jika belum ada di DB) --}}
+                            @if($user['is_active'] ?? true)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-600 mr-1.5"></span>
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-500 mr-1.5"></span>
+                                    Non-aktif
+                                </span>
+                            @endif
+                        </td>
+
+                        {{-- 7. AKSI --}}
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <div class="flex justify-center items-center space-x-3">
-                            
-                            {{-- Tombol Lihat (Biru) --}}
-                            <a href="{{ route('admin.users.show', $user['id'] ?? 1) }}" class="flex items-center justify-center w-7 h-7 bg-blue-50 text-blue-600 rounded-md border border-blue-100 hover:bg-blue-100 transition-all duration-200 shadow-sm" title="Lihat Detail">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </a>
+                                
+                                {{-- Tombol Lihat --}}
+                                <a href="{{ route('admin.users.show', $user['id'] ?? 1) }}" class="flex items-center justify-center w-7 h-7 bg-blue-50 text-blue-600 rounded-md border border-blue-100 hover:bg-blue-100 transition-all duration-200 shadow-sm" title="Lihat Detail">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                </a>
 
-                            {{-- Tombol Edit (Kuning/Amber - Warna Khas Edit) --}}
-                            <button class="flex items-center justify-center w-7 h-7 bg-amber-50 text-amber-600 rounded-md border border-amber-100 hover:bg-yellow-100 transition-all duration-200 shadow-sm" title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
+                                {{-- Tombol Edit --}}
+                                <a href="{{ route('admin.users.edit', $user['id'] ?? 1) }}" class="flex items-center justify-center w-7 h-7 bg-amber-50 text-amber-600 rounded-md border border-amber-100 hover:bg-yellow-100 transition-all duration-200 shadow-sm" title="Edit">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </a>
 
-                            {{-- Tombol Hapus (Merah) --}}
-                            <button class="flex items-center justify-center w-7 h-7 bg-red-50 text-red-600 rounded-md border border-red-100 hover:bg-red-100 transition-all duration-200 shadow-sm" title="Hapus">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </div>
-                    </td>
+                                {{-- Tombol Hapus --}}
+                                <button class="flex items-center justify-center w-7 h-7 bg-red-50 text-red-600 rounded-md border border-red-100 hover:bg-red-100 transition-all duration-200 shadow-sm" title="Hapus">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                        <td colspan="7" class="px-6 py-10 text-center text-gray-500">
                             Belum ada data user.
                         </td>
                     </tr>
