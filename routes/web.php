@@ -158,6 +158,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+    // ================= DASHBOARD NASABAH =================
+    // URL: http://127.0.0.1:8000/nasabah
+    Route::prefix('nasabah')->name('nasabah.')->group(function () {
+        
+        // Menggunakan '/' agar bisa diakses langsung via /nasabah
+        Route::get('/', function () {
+            return view('nasabah.dashboard');
+        })->name('dashboard');
+
+    });
+
 });
 
 // 3. Memuat route autentikasi bawaan
