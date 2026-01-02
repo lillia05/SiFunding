@@ -8,12 +8,14 @@
     <div class="flex flex-col md:flex-row justify-between items-center mb-8">
         <div>
             <h1 class="text-2xl font-bold text-gray-800 font-heading">Daftar Pengguna</h1>
-            <p class="text-sm text-gray-500">Kelola akun admin, funding officer, dan nasabah.</p>
+            <p class="text-sm text-gray-500">Kelola akun admin dan funding officer.</p>
         </div>
-        <button class="flex items-center px-5 py-2.5 bg-bsi-teal text-white text-sm font-medium rounded-xl hover:bg-teal-700 transition shadow-sm mt-4 md:mt-0">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Tambah User
-        </button>
+        <div>
+            <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 bg-bsi-orange text-white rounded-lg text-sm font-bold shadow-md hover:bg-yellow-600 transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Tambah Akun Baru
+            </a>
+        </div>
     </div>
 
     {{-- CARD TABEL --}}
@@ -101,9 +103,9 @@
                             <div class="flex justify-center items-center space-x-3">
                             
                             {{-- Tombol Lihat (Biru) --}}
-                            <button class="flex items-center justify-center w-7 h-7 bg-blue-50 text-blue-600 rounded-md border border-blue-100 hover:bg-blue-100 transition-all duration-200 shadow-sm" title="Lihat Detail">
+                            <a href="{{ route('admin.users.show', $user['id'] ?? 1) }}" class="flex items-center justify-center w-7 h-7 bg-blue-50 text-blue-600 rounded-md border border-blue-100 hover:bg-blue-100 transition-all duration-200 shadow-sm" title="Lihat Detail">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </button>
+                            </a>
 
                             {{-- Tombol Edit (Kuning/Amber - Warna Khas Edit) --}}
                             <button class="flex items-center justify-center w-7 h-7 bg-amber-50 text-amber-600 rounded-md border border-amber-100 hover:bg-yellow-100 transition-all duration-200 shadow-sm" title="Edit">
