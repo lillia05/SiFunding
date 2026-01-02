@@ -20,9 +20,9 @@
     </div>
 
     {{-- FORM EDIT --}}
-    <form action="{{ route('admin.users.update', $user->id ?? 1) }}" method="POST">
+    <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
         @csrf
-        @method('PUT') {{-- PENTING: Method PUT untuk Update --}}
+        @method('PUT')
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
             
@@ -58,8 +58,9 @@
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan (Role)</label>
                             <div class="relative">
                                 <select name="role" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white appearance-none cursor-pointer">
-                                    <option value="funding_officer" {{ $user->role == 'funding_officer' ? 'selected' : '' }}>Funding Officer</option>
-                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Administrator</option>
+                                    {{-- Sesuaikan Value dengan Database --}}
+                                    <option value="Funding" {{ $user->role == 'Funding' ? 'selected' : '' }}>Funding Officer</option>
+                                    <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Administrator</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -106,9 +107,10 @@
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Status Login</label>
                             <div class="relative">
-                                <select name="is_active" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white appearance-none cursor-pointer">
-                                    <option value="1" selected>Aktif (Bisa Login)</option>
-                                    <option value="0">Nonaktif (Dibekukan)</option>
+                                {{-- Ubah name jadi 'status' dan value jadi 'active'/'inactive' --}}
+                                <select name="status" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white appearance-none cursor-pointer">
+                                    <option value="active" {{ $user->status == 'active' ? 'selected' : '' }}>Aktif (Bisa Login)</option>
+                                    <option value="inactive" {{ $user->status == 'inactive' ? 'selected' : '' }}>Nonaktif (Dibekukan)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>

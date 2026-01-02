@@ -71,10 +71,10 @@
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan (Role)</label>
                             <div class="relative">
-                                <select name="role" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-gray-50 focus:bg-white appearance-none cursor-pointer" required>
+                                <select name="role" class="..." required>
                                     <option value="" disabled selected>-- Pilih Jabatan --</option>
-                                    <option value="funding_officer" {{ old('role') == 'funding_officer' ? 'selected' : '' }}>Funding Officer (Staff Lapangan)</option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrator (Akses Penuh)</option>
+                                    <option value="Funding" {{ old('role') == 'Funding' ? 'selected' : '' }}>Funding Officer (Staff Lapangan)</option>
+                                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Administrator (Akses Penuh)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 // Import Models agar bisa dipakai di route closure (Dashboard Admin)
 use App\Models\Nasabah;
@@ -46,64 +47,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ]); 
         })->name('dashboard');
 
-        // 2. Manajemen Akun (List User)
-        Route::get('/users', function () {
-            $users = \App\Models\User::all();
-            return view('admin.users.index', compact('users'));
-        })->name('users.index');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::patch('/users/{id}/status', [UserController::class, 'toggleStatus'])->name('users.status');
+        Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-        // [BARU] 3. Halaman Tambah User (Create)
-        Route::get('/users/create', function () {
-            return view('admin.users.create');
-        })->name('users.create'); // <--- INI YANG TADI HILANG
-
-        // [BARU] 4. Proses Simpan User (Store) - Dummy
-        Route::post('/users', function () {
-            // Nanti di sini logika simpan ke database
-            return redirect()->route('admin.users.index');
-        })->name('users.store'); 
-
-        // [BARU] 5. Halaman Lihat Detail User (Show)
-        Route::get('/users/{id}', function ($id) {
-            // Mengambil data user berdasarkan ID
-            // Jika data tidak ketemu (misal untuk demo), kita buat data dummy
-            $user = \App\Models\User::find($id) ?? new \App\Models\User([
-                'id' => $id,
-                'name' => 'Contoh User Admin',
-                'username' => 'admin_demo',
-                'email' => 'admin@sifunding.com',
-                'role' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            
-            return view('admin.users.show', compact('user'));
-        })->name('users.show');
-
-        // [BARU] 6. Halaman Edit User
-        Route::get('/users/{id}/edit', function ($id) {
-            // Cari user atau pakai dummy jika tidak ada di DB (untuk preview)
-            $user = \App\Models\User::find($id) ?? new \App\Models\User([
-                'id' => $id,
-                'name' => 'User Demo',
-                'username' => 'user_demo',
-                'email' => 'demo@bsi.co.id',
-                'role' => 'funding_officer',
-                'created_at' => now(),
-            ]);
-            return view('admin.users.edit', compact('user'));
-        })->name('users.edit');
-
-        // [BARU] 7. Proses Update User (Update)
-        Route::put('/users/{id}', function ($id) {
-            // Logika update ke database nanti disini
-            return redirect()->route('admin.users.index');
-        })->name('users.update');
-
-        // 5. Data Nasabah (Versi Admin)
         Route::get('/nasabah', [NasabahController::class, 'index'])->name('nasabah.index');
 
-        // 6. Tracking / Distribusi (Versi Admin)
         Route::get('/tracking', [MonitoringController::class, 'trackingPage'])->name('tracking.index');
     });
 

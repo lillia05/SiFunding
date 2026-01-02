@@ -19,7 +19,8 @@ class DemoDataSeeder extends Seeder
             'email' => 'funding@bsi.com',
             'password' => Hash::make('12345678'),
             'role' => 'Funding',
-            'email_verified_at' => now(), 
+            'email_verified_at' => now(),
+            'status' => 'active', // Pastikan status aktif
         ]);
 
         $admin = User::create([
@@ -28,53 +29,57 @@ class DemoDataSeeder extends Seeder
             'password' => Hash::make('admin123@'),
             'role' => 'Admin',
             'email_verified_at' => now(), 
+            'status' => 'active', // Pastikan status aktif
         ]);
 
+        // Data Dummy Pendaftar (Nasabah)
         $dataPendaftar = [
             [
                 'username' => 'fauzi99',
                 'email' => 'fauzi@example.com',
                 'nik' => '3201010101010001',
-                'status' => 'draft', 
+                'status_pengajuan' => 'draft', // Saya ubah nama key biar ga bingung sama status user
                 'produk' => 'Payroll Wadiah'
             ],
             [
                 'username' => 'sitiaminah',
                 'email' => 'siti@example.com',
                 'nik' => '3201010101010002',
-                'status' => 'process', 
+                'status_pengajuan' => 'process', 
                 'produk' => 'Easy Mudharabah'
             ],
             [
                 'username' => 'budi_s',
                 'email' => 'budi@example.com',
                 'nik' => '3201010101010003',
-                'status' => 'ready', 
+                'status_pengajuan' => 'ready', 
                 'produk' => 'Haji'
             ],
             [
                 'username' => 'rina wijaya',
                 'email' => 'rina@example.com',
                 'nik' => '3201010101010004',
-                'status' => 'done', 
+                'status_pengajuan' => 'done', 
                 'produk' => 'Tapenas'
             ],
             [
                 'username' => 'andi pratama',
                 'email' => 'andi@example.com',
                 'nik' => '3201010101010005',
-                'status' => 'draft', 
+                'status_pengajuan' => 'draft', 
                 'produk' => 'Easy Wadiah'
             ],
         ];
 
         foreach ($dataPendaftar as $data) {
+            // 3. Buat User Nasabah (Tambahkan status active)
             $userNasabah = User::create([
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'password' => Hash::make('12345678'),
                 'role' => 'Nasabah',
                 'email_verified_at' => now(), 
+                'status' => 'active', // <--- TAMBAHAN: Set status user jadi active
             ]);
 
             $nasabah = Nasabah::create([
@@ -95,11 +100,12 @@ class DemoDataSeeder extends Seeder
             $pengajuan = PengajuanRek::create([
                 'nasabah_id' => $nasabah->id,
                 'jenis_produk' => $data['produk'],
-                'no_rek' => in_array($data['status'], ['ready', 'done']) ? '7' . rand(100000000, 999999999) : null,
-                'status' => $data['status'],
+                'no_rek' => in_array($data['status_pengajuan'], ['ready', 'done']) ? '7' . rand(100000000, 999999999) : null,
+                'status' => $data['status_pengajuan'], // Pakai status_pengajuan
                 'tanggal_input' => Carbon::now()->subDays(rand(1, 5)),
             ]);
 
+            // Log Awal (Draft)
             StatusLog::create([
                 'pengajuan_id' => $pengajuan->id,
                 'user_id' => $userNasabah->id, 
@@ -109,12 +115,13 @@ class DemoDataSeeder extends Seeder
                 'created_at' => $pengajuan->tanggal_input,
             ]);
 
-            if ($data['status'] !== 'draft') {
+            // Log Lanjutan (Jika status bukan draft)
+            if ($data['status_pengajuan'] !== 'draft') {
                 StatusLog::create([
                     'pengajuan_id' => $pengajuan->id,
                     'user_id' => $funding->id,
                     'status_lama' => 'draft',
-                    'status_baru' => $data['status'],
+                    'status_baru' => $data['status_pengajuan'],
                     'catatan' => 'Status berkas diperbarui oleh petugas funding untuk proses selanjutnya.',
                     'created_at' => Carbon::now(),
                 ]);
