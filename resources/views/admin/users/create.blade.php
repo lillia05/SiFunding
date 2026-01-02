@@ -73,8 +73,8 @@
                             <div class="relative">
                                 <select name="role" class="..." required>
                                     <option value="" disabled selected>-- Pilih Jabatan --</option>
-                                    <option value="Funding" {{ old('role') == 'Funding' ? 'selected' : '' }}>Funding Officer (Staff Lapangan)</option>
-                                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Administrator (Akses Penuh)</option>
+                                    <option value="Funding" {{ old('role') == 'Funding' ? 'selected' : '' }}>Funding Officer</option>
+                                    <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Administrator</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
