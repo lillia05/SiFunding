@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\NasabahRegistrationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Nasabah;
@@ -18,6 +19,13 @@ use App\Models\PengajuanRek;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+// =========================================================================
+// 1. ROUTE PUBLIK (PENDAFTARAN MANDIRI)
+// =========================================================================
+// Menggunakan NasabahRegistrationController
+Route::get('/pengajuan-nasabah', [NasabahRegistrationController::class, 'create'])->name('nasabah.register.create');
+Route::post('/pengajuan-nasabah', [NasabahRegistrationController::class, 'store'])->name('nasabah.register.store');
 
 // 2. Group Route yang butuh Login
 Route::middleware(['auth', 'verified'])->group(function () {

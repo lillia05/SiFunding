@@ -9,6 +9,7 @@
         
         {{-- LOGIKA ROUTE DINAMIS --}}
         @php
+            $user = auth()->user();
             $isAdmin = auth()->user()->username === 'admin';
             
             // Tentukan link berdasarkan role
@@ -72,18 +73,28 @@
     </nav>
 
     {{-- FOOTER SIDEBAR --}}
+    @if($user)
     <div class="border-t border-gray-100 p-4 bg-gray-50">
         <div class="flex items-center">
-            <div class="h-10 w-10 rounded-full bg-bsi-teal flex items-center justify-center text-white font-bold shadow-md uppercase">
-                {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
-            </div>
+            
+            {{-- LOGIKA AVATAR: Cek apakah user punya avatar --}}
+            @if($user->avatar)
+                <img src="{{ asset('storage/' . $user->avatar) }}" 
+                     alt="Avatar" 
+                     class="h-10 w-10 rounded-full object-cover border border-gray-200 shadow-md">
+            @else
+                {{-- Fallback: Tampilkan Inisial jika tidak ada avatar --}}
+                <div class="h-10 w-10 rounded-full bg-bsi-teal flex items-center justify-center text-white font-bold shadow-md uppercase">
+                    {{ substr($user->name ?? $user->username, 0, 1) }}
+                </div>
+            @endif
             
             <div class="ml-3 overflow-hidden">
                 <p class="text-sm font-semibold text-gray-800 truncate w-32">
-                    {{ auth()->user()->name ?? auth()->user()->username }}
+                    {{ $user->name ?? $user->username }}
                 </p>
                 <p class="text-xs text-gray-500 truncate">
-                    {{ auth()->user()->username === 'admin' ? 'Administrator' : 'Funding Officer' }}
+                    {{ ($user->username ?? '') === 'admin' ? 'Administrator' : ($user->role ?? 'Funding Officer') }}
                 </p>
             </div>
 
@@ -95,4 +106,5 @@
             </form>
         </div>
     </div>
+    @endif
 </aside>

@@ -6,12 +6,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Formulir Pengajuan Nasabah - SiFunding</title>
     
-    {{-- 1. FONT YANG SAMA DENGAN FUNDING (Inter & Poppins) --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     
-    {{-- 2. TAILWIND CDN DENGAN CONFIG WARNA BSI --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -33,8 +31,6 @@
             }
         }
     </script>
-    {{-- AlpineJS untuk interaksi ringan --}}
-    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="bg-gray-50 font-sans antialiased text-gray-800 min-h-screen flex flex-col">
 
@@ -55,40 +51,24 @@
 
     {{-- KONTEN UTAMA --}}
     <main class="flex-grow py-10">
-        {{-- CONTAINER UTAMA (Agar rapi & tidak mepet) --}}
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
 
             {{-- HEADER HALAMAN --}}
             <div class="flex justify-center items-center mb-8">
                 <div class="text-center">
-                    <h1 class="text-2xl font-heading font-bold text-gray-800">Input Data Nasabah</h1>
-                    <p class="text-sm text-gray-500 mt-1">Isi formulir lengkap sesuai identitas Anda.</p>
+                    <h1 class="text-2xl font-heading font-bold text-gray-800">Formulir Pembukaan Rekening</h1>
+                    <p class="text-sm text-gray-500 mt-1">Lengkapi data di bawah ini. Akun akan dibuat otomatis.</p>
                 </div>
             </div>
-
-            {{-- ALERT SUKSES --}}
-            @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl shadow-sm flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                {{ session('success') }}
-            </div>
-            @endif
 
             {{-- ALERT ERROR --}}
-            @if(session('error'))
-            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl shadow-sm flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <div>
-                    <span class="font-bold">Gagal Menyimpan:</span>
-                    {{ session('error') }}
-                </div>
-            </div>
-            @endif
-
             @if ($errors->any())
             <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl shadow-sm">
-                <h3 class="font-bold mb-1">Terjadi Kesalahan:</h3>
-                <ul class="list-disc list-inside text-sm">
+                <h3 class="font-bold mb-1 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    Mohon perbaiki kesalahan berikut:
+                </h3>
+                <ul class="list-disc list-inside text-sm ml-7">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -97,53 +77,55 @@
             @endif
 
             {{-- FORM INPUT --}}
-            <form action="{{ route('nasabah.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('nasabah.register.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="status" value="pending">
-
+                
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     
-                    {{-- KOLOM KIRI (2/3 Lebar) --}}
+                    {{-- KOLOM KIRI --}}
                     <div class="xl:col-span-2 space-y-8">
                         
-                        {{-- CARD 1: INFORMASI AKUN --}}
+                        {{-- CARD 1: INFORMASI AKUN & PRODUK --}}
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
                             <div class="absolute top-0 right-0 w-20 h-20 bg-bsi-teal/10 rounded-bl-full"></div>
                             
                             <h2 class="text-lg font-heading font-bold text-gray-800 mb-6 flex items-center relative z-10">
-                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-teal-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                </span>
-                                Informasi Akun & Produk
+                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-teal-100">1</span>
+                                Informasi Produk & Akun
                             </h2>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {{-- Nama Lengkap (Jadi Username) --}}
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap (Sesuai KTP)</label>
-                                    {{-- Readonly karena nasabah login --}}
-                                    <input type="text" name="username" value="{{ auth()->user()->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" placeholder="Masukkan nama lengkap Anda" readonly>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap (Sesuai KTP) <span class="text-red-500">*</span></label>
+                                    <input type="text" name="username" value="{{ old('username') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="Masukkan nama lengkap Anda" required>
+                                    <p class="text-xs text-gray-400 mt-1">Nama ini akan digunakan sebagai Username login Anda.</p>
                                 </div>
 
+                                {{-- Email --}}
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Email</label>
-                                    <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none" placeholder="Contoh: nasabah@gmail.com">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Email Aktif <span class="text-red-500">*</span></label>
+                                    <input type="email" name="email" value="{{ old('email') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="Contoh: nasabah@gmail.com" required>
+                                    <p class="text-xs text-gray-400 mt-1">Link verifikasi akan dikirim ke email ini.</p>
                                 </div>
 
+                                {{-- Rekening Lama --}}
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-2">Rekening BSI Lama <span class="text-gray-400 font-normal">(Opsional)</span></label>
-                                    <input type="number" name="rek_bsi_lama" value="{{ old('rek_bsi_lama') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white" placeholder="Nomor rekening lama jika ada">
+                                    <input type="number" name="rek_bsi_lama" value="{{ old('rek_bsi_lama') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="Nomor rekening lama jika ada">
                                 </div>
 
+                                {{-- Produk --}}
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Tabungan</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Tabungan <span class="text-red-500">*</span></label>
                                     <div class="relative">
                                         <select name="jenis_produk" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white appearance-none cursor-pointer" required>
-                                            <option value="">Pilih Produk Pembukaan Rekening</option>
-                                            <option value="Easy Wadiah">Easy Wadiah</option>
-                                            <option value="Easy Mudharabah">Easy Mudharabah</option>
-                                            <option value="Haji">Tabungan Haji</option>
-                                            <option value="Tapenas">Tapenas</option>
-                                            <option value="Payroll Wadiah">Payroll Wadiah</option>
+                                            <option value="">-- Pilih Produk Pembukaan Rekening --</option>
+                                            <option value="Easy Wadiah" {{ old('jenis_produk') == 'Easy Wadiah' ? 'selected' : '' }}>Easy Wadiah</option>
+                                            <option value="Easy Mudharabah" {{ old('jenis_produk') == 'Easy Mudharabah' ? 'selected' : '' }}>Easy Mudharabah</option>
+                                            <option value="Haji" {{ old('jenis_produk') == 'Haji' ? 'selected' : '' }}>Tabungan Haji</option>
+                                            <option value="Tapenas" {{ old('jenis_produk') == 'Tapenas' ? 'selected' : '' }}>Tapenas</option>
+                                            <option value="Payroll Wadiah" {{ old('jenis_produk') == 'Payroll Wadiah' ? 'selected' : '' }}>Payroll Wadiah</option>
                                         </select>
                                         <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -156,15 +138,13 @@
                         {{-- CARD 2: BIODATA DIRI --}}
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                             <h2 class="text-lg font-heading font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-orange-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                                </span>
+                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-orange-100">2</span>
                                 Biodata Diri
                             </h2>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">NIK KTP</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">NIK KTP <span class="text-red-500">*</span></label>
                                     <input type="number" name="nik_ktp" value="{{ old('nik_ktp') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="16 digit angka" required>
                                 </div>
 
@@ -174,27 +154,27 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Ibu Kandung</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Ibu Kandung <span class="text-red-500">*</span></label>
                                     <input type="text" name="nama_ibu" value="{{ old('nama_ibu') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" required>
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Tempat Lahir</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Tempat Lahir <span class="text-red-500">*</span></label>
                                     <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" required>
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Lahir</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Lahir <span class="text-red-500">*</span></label>
                                     <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition text-gray-600" required>
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nomor Handphone (WA)</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nomor Handphone (WA) <span class="text-red-500">*</span></label>
                                     <input type="number" name="no_hp" value="{{ old('no_hp') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="08xxxxxxxxxx" required>
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Status Pernikahan</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Status Pernikahan <span class="text-red-500">*</span></label>
                                     <div class="relative">
                                         <select name="status_pernikahan" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition bg-white cursor-pointer appearance-none">
                                             <option value="Lajang">Lajang</option>
@@ -213,7 +193,7 @@
                                 </div>
 
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Domisili</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Domisili <span class="text-red-500">*</span></label>
                                     <textarea name="alamat" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan" required>{{ old('alamat') }}</textarea>
                                 </div>
                             </div>
@@ -222,20 +202,18 @@
                         {{-- CARD 3: INFORMASI PEKERJAAN --}}
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                             <h2 class="text-lg font-heading font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-indigo-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                </span>
+                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-indigo-100">3</span>
                                 Informasi Pekerjaan
                             </h2>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Area Kerja</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Area Kerja <span class="text-red-500">*</span></label>
                                     <input type="text" name="area_kerja" value="{{ old('area_kerja') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: PLN UPT Bengkulu, GI Lahat, dll" required>
                                 </div>
 
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan <span class="text-red-500">*</span></label>
                                     <input type="text" name="jabatan" value="{{ old('jabatan') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition placeholder-gray-400" placeholder="Contoh: Satpam, Cleaning Service, Teknisi" required>
                                 </div>
                             </div>
@@ -243,30 +221,28 @@
 
                     </div>
 
-                    {{-- KOLOM KANAN (1/3 Lebar) --}}
+                    {{-- KOLOM KANAN --}}
                     <div class="space-y-8">
                         
                         {{-- CARD 4: KONTAK DARURAT --}}
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                             <h2 class="text-lg font-heading font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-blue-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                </span>
+                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3 border border-blue-100">4</span>
                                 Kontak Darurat
                             </h2>
                             <p class="text-xs text-gray-400 mb-4 -mt-4 ml-14">Keluarga tidak serumah</p>
 
                             <div class="space-y-5">
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Kerabat</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Nama Kerabat <span class="text-red-500">*</span></label>
                                     <input type="text" name="nama_keluarga" value="{{ old('nama_keluarga') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">No. HP Kerabat</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">No. HP Kerabat <span class="text-red-500">*</span></label>
                                     <input type="number" name="hp_keluarga" value="{{ old('hp_keluarga') }}" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-bsi-teal focus:border-bsi-teal outline-none transition" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Kerabat</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Kerabat <span class="text-red-500">*</span></label>
                                     <textarea name="alamat_keluarga" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition" required>{{ old('alamat_keluarga') }}</textarea>
                                 </div>
                             </div>
@@ -275,23 +251,20 @@
                         {{-- CARD 5: UPLOAD DOKUMEN --}}
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                             <h2 class="text-lg font-heading font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                </span>
+                                <span class="w-10 h-10 rounded-full bg-teal-50 text-bsi-teal flex items-center justify-center mr-3">5</span>
                                 Upload Dokumen
                             </h2>
 
                             <div class="space-y-4">
-                                
                                 {{-- KTP --}}
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Foto KTP</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Foto KTP <span class="text-red-500">*</span></label>
                                     <div class="flex items-center justify-center w-full">
                                         <label for="foto_ktp" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition hover:border-bsi-teal group overflow-hidden relative">
                                             
                                             <div id="placeholder_ktp" class="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <svg class="w-8 h-8 mb-3 text-gray-400 group-hover:text-bsi-teal transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                                <p class="text-xs text-gray-500">Upload JPG/PNG</p>
+                                                <p class="text-xs text-gray-500">Klik untuk upload KTP</p>
                                             </div>
                                             
                                             <img id="preview_ktp" class="hidden w-full h-full object-cover rounded-xl absolute inset-0" />
@@ -303,13 +276,13 @@
                                 
                                 {{-- NPWP --}}
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">Foto NPWP</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Foto NPWP (Opsional)</label>
                                     <div class="flex items-center justify-center w-full">
                                         <label for="foto_npwp" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition hover:border-bsi-teal group overflow-hidden relative">
                                             
                                             <div id="placeholder_npwp" class="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <svg class="w-8 h-8 mb-3 text-gray-400 group-hover:text-bsi-teal transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                                <p class="text-xs text-gray-500">Upload JPG/PNG</p>
+                                                <p class="text-xs text-gray-500">Klik untuk upload NPWP</p>
                                             </div>
 
                                             <img id="preview_npwp" class="hidden w-full h-full object-cover rounded-xl absolute inset-0" />
@@ -323,10 +296,11 @@
 
                         {{-- TOMBOL SUBMIT STICKY --}}
                         <div class="sticky top-24">
-                            <button type="submit" class="w-full bg-bsi-teal text-white font-bold py-4 rounded-xl shadow-lg hover:bg-teal-700 transition transform flex justify-center items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Simpan Data
+                            <button type="submit" class="w-full bg-bsi-teal text-white font-bold py-4 rounded-xl shadow-lg hover:bg-teal-700 transition transform flex justify-center items-center group">
+                                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Simpan Data & Buat Akun
                             </button>
+                            <p class="text-xs text-center text-gray-400 mt-2">Password akun akan otomatis diset: 12345678</p>
                         </div>
 
                     </div>

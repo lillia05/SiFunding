@@ -140,7 +140,7 @@ class NasabahController extends Controller
                     'user_id' => auth()->id(), 
                     'status_lama' => null,
                     'status_baru' => 'draft',
-                    'catatan' => 'Input data baru oleh Funding Officer',
+                    'catatan' => 'Input data baru',
                 ]);
 
             });
