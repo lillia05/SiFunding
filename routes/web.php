@@ -5,7 +5,6 @@ use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-// Import Models agar bisa dipakai di route closure (Dashboard Admin)
 use App\Models\Nasabah;
 use App\Models\PengajuanRek;
 

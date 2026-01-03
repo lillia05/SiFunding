@@ -29,8 +29,9 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Akun Funding</p>
-                    {{-- Hitung user selain admin --}}
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\User::where('username', '!=', 'admin')->count() }}</p>
+                    
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\User::where('role', 'Funding')->count() }}</p>
+                    
                     <p class="text-xs text-gray-400 mt-2">Staff Aktif</p>
                 </div>
                 <div class="p-3 bg-blue-50 rounded-lg text-blue-600">
@@ -45,7 +46,8 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Nasabah</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalNasabah }}</p>
+                    {{-- Menggunakan variable dari controller atau query langsung jika variabel belum ada --}}
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalNasabah ?? \App\Models\Nasabah::count() }}</p>
                     <p class="text-xs text-gray-400 mt-2">Data Keseluruhan</p>
                 </div>
                 <div class="p-3 bg-orange-50 rounded-lg text-bsi-orange">
@@ -60,7 +62,8 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Buku Tabungan Selesai</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $doneCount }}</p>
+                    {{-- Menggunakan variable dari controller atau query langsung --}}
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $doneCount ?? \App\Models\PengajuanRek::where('status', 'done')->count() }}</p>
                     <p class="text-xs text-gray-400 mt-2">Telah Didistribusikan</p>
                 </div>
                 <div class="p-3 bg-teal-50 rounded-lg text-bsi-teal">
@@ -90,9 +93,12 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    {{-- Ambil 5 user terakhir selain admin --}}
+                    
                     @php
-                        $latestUsers = \App\Models\User::where('username', '!=', 'admin')->latest()->take(5)->get();
+                        $latestUsers = \App\Models\User::whereIn('role', ['Admin', 'Funding'])
+                                        ->latest()
+                                        ->take(5)
+                                        ->get();
                     @endphp
 
                     @forelse($latestUsers as $user)
@@ -119,10 +125,12 @@
 
                         {{-- 5. Jabatan --}}
                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                            @if($user->username === 'admin')
-                                <span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800">Administrator</span>
-                            @else
+                            @if($user->role === 'Admin')
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-purple-100 text-purple-800">Administrator</span>
+                            @elseif($user->role === 'Funding')
                                 <span class="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800">Funding Officer</span>
+                            @else
+                                <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-800">{{ $user->role }}</span>
                             @endif
                         </td>
                     </tr>
