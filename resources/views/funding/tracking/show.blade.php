@@ -1,3 +1,9 @@
+@php
+    $userRole = auth()->user()->role;
+    $prefix = strtolower($userRole); 
+    
+@endphp
+
 @extends('layouts.funding')
 
 @section('title', 'Detail Tracking - SiFunding')
@@ -7,7 +13,7 @@
     <div class="max-w-6xl mx-auto">
         
         <div class="mb-6">
-            <a href="{{ route('tracking.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:text-bsi-teal hover:border-bsi-teal hover:bg-teal-50 transition shadow-sm">
+            <a href="{{ route($prefix . '.tracking.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:text-bsi-teal hover:border-bsi-teal hover:bg-teal-50 transition shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali
             </a>
@@ -85,13 +91,15 @@
 
                 </div>
 
-                <div class="mt-10 pt-6 border-t border-gray-100 flex justify-end">
-                    <a href="{{ route('tracking.print.detail', $pengajuan->id) }}" target="_blank" 
-                    class="inline-flex items-center px-4 py-2 bg-bsi-teal border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 active:bg-teal-900 focus:outline-none focus:border-teal-900 focus:ring ring-teal-300 disabled:opacity-25 transition ease-in-out duration-150 ml-2">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                        Cetak Tanda Terima
-                    </a>
-                </div>
+                @if(Route::has($prefix . '.tracking.print.detail'))
+                    <div class="mt-10 pt-6 border-t border-gray-100 flex justify-end">
+                        <a href="{{ route($prefix . '.tracking.print.detail', $pengajuan->id) }}" target="_blank" 
+                        class="inline-flex items-center px-4 py-2 bg-bsi-teal border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 active:bg-teal-900 focus:outline-none focus:border-teal-900 focus:ring ring-teal-300 disabled:opacity-25 transition ease-in-out duration-150 ml-2">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                            Cetak Tanda Terima
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

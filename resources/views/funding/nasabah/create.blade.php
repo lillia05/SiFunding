@@ -1,3 +1,9 @@
+@php
+    $userRole = auth()->user()->role;
+    $prefix = strtolower($userRole); 
+    
+@endphp
+
 @extends('layouts.funding')
 
 @section('title', 'Input Nasabah Baru - SiFunding')
@@ -6,7 +12,7 @@
 
     <div class="flex items-center justify-between mb-8">
         <div class="flex-1">
-            <a href="{{ route('nasabah.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-bsi-teal transition shadow-sm">
+            <a href="{{ route($prefix . '.nasabah.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-bsi-teal transition shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali
             </a>
@@ -35,7 +41,7 @@
     </div>
     @endif
 
-    <form action="{{ route('nasabah.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route($prefix . '.nasabah.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         @if ($errors->any())

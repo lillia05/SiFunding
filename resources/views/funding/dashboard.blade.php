@@ -82,7 +82,7 @@
     <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
         <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-heading font-semibold text-gray-800">Aktivitas Terbaru</h3>
-            <a href="{{ route('tracking.index') }}" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya</a>
+            <a href="{{ route('funding.tracking.index') }}" class="text-sm font-medium text-bsi-teal hover:text-teal-700 transition">Lihat Selengkapnya</a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
