@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage; 
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class NasabahController extends Controller
 {
@@ -46,7 +47,6 @@ class NasabahController extends Controller
 
         $nasabah->appends($request->all());
 
-        // View tetap menggunakan path yang sama karena kita sudah setting layoutnya dinamis
         return view('funding.nasabah.index', compact('nasabah'));
     }
 
@@ -63,7 +63,7 @@ class NasabahController extends Controller
             'jenis_produk' => 'required',
             
             'nik_ktp' => 'required|numeric|digits:16|unique:nasabah,nik_ktp',
-            'npwp' => 'nullable|string', // NPWP kadang ada titik/strip, ubah ke string jika perlu, atau numeric jika murni angka
+            'npwp' => 'nullable|string', 
             'no_hp' => 'required|numeric',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
@@ -96,17 +96,15 @@ class NasabahController extends Controller
                     $pathNpwp = $request->file('foto_npwp')->store('dokumen_nasabah', 'public');
                 }
 
-                // 1. Create User Login
                 $user = User::create([
-                    'name' => $request->username, // Simpan ke field name juga
+                    'name' => $request->username, 
                     'username' => $request->username, 
                     'email' => $request->email,
-                    'password' => Hash::make('12345678'), // Password Default
+                    'password' => Hash::make('12345678'), 
                     'role' => 'Nasabah',
                     'email_verified_at' => now(),
                 ]);
 
-                // 2. Create Data Nasabah
                 $nasabah = Nasabah::create([
                     'user_id' => $user->id,
                     'nik_ktp' => $request->nik_ktp,
@@ -126,14 +124,12 @@ class NasabahController extends Controller
                     'foto_npwp' => $pathNpwp,
                 ]);
 
-                // 3. Create Pekerjaan
                 PekerjaanNasabah::create([
                     'nasabah_id' => $nasabah->id,
                     'area_kerja' => $request->area_kerja,
                     'jabatan' => $request->jabatan,
                 ]);
 
-                // 4. Create Pengajuan Rekening (Status awal: Draft)
                 $pengajuan = PengajuanRek::create([
                     'nasabah_id' => $nasabah->id,
                     'jenis_produk' => $request->jenis_produk,
@@ -141,7 +137,6 @@ class NasabahController extends Controller
                     'tanggal_input' => now(),
                 ]);
 
-                // 5. Log Status
                 StatusLog::create([
                     'pengajuan_id' => $pengajuan->id,
                     'user_id' => auth()->id(), 
@@ -152,10 +147,8 @@ class NasabahController extends Controller
 
             });
 
-            // LOGIKA REDIRECT DINAMIS
-            $prefix = strtolower($request->user()->role); // 'admin' atau 'funding'
+            $prefix = strtolower($request->user()->role); 
             
-            // Redirect ke index Nasabah sesuai role
             return redirect()->route($prefix . '.nasabah.index')->with('success', 'Data nasabah berhasil disimpan!');
 
         } catch (\Exception $e) {
@@ -181,7 +174,6 @@ class NasabahController extends Controller
 
         $request->validate([
             'username' => 'required|string|max:255',
-            // Ignore current ID for unique checks
             'email' => 'required|email|unique:users,email,' . $nasabah->user_id,
             'jenis_produk' => 'required',
             'nik_ktp' => 'required|numeric|digits:16|unique:nasabah,nik_ktp,' . $id,
@@ -208,34 +200,28 @@ class NasabahController extends Controller
         try {
             DB::transaction(function () use ($request, $nasabah) {
                 
-                // Update User
                 $nasabah->user->update([
                     'name' => $request->username,
                     'username' => $request->username,
                     'email' => $request->email,
                 ]);
 
-                // Handle File KTP
                 $pathKtp = $nasabah->foto_ktp; 
                 if ($request->hasFile('foto_ktp')) {
-                    // Hapus file lama jika ada
                     if ($nasabah->foto_ktp && Storage::disk('public')->exists($nasabah->foto_ktp)) {
                         Storage::disk('public')->delete($nasabah->foto_ktp);
                     }
                     $pathKtp = $request->file('foto_ktp')->store('dokumen_nasabah', 'public');
                 }
 
-                // Handle File NPWP
                 $pathNpwp = $nasabah->foto_npwp;
                 if ($request->hasFile('foto_npwp')) {
-                    // Hapus file lama jika ada
                     if ($nasabah->foto_npwp && Storage::disk('public')->exists($nasabah->foto_npwp)) {
                         Storage::disk('public')->delete($nasabah->foto_npwp);
                     }
                     $pathNpwp = $request->file('foto_npwp')->store('dokumen_nasabah', 'public');
                 }
 
-                // Update Data Nasabah
                 $nasabah->update([
                     'nik_ktp' => $request->nik_ktp,
                     'npwp' => $request->npwp,
@@ -254,7 +240,6 @@ class NasabahController extends Controller
                     'foto_npwp' => $pathNpwp,
                 ]);
 
-                // Update Pekerjaan (updateOrCreate untuk jaga-jaga jika data kosong sebelumnya)
                 $nasabah->pekerjaan()->updateOrCreate(
                     ['nasabah_id' => $nasabah->id],
                     [
@@ -263,7 +248,6 @@ class NasabahController extends Controller
                     ]
                 );
 
-                // Update Jenis Produk di Pengajuan (Hanya jika masih draft)
                 $pengajuanTerakhir = $nasabah->pengajuan()->latest()->first();
                 if ($pengajuanTerakhir && $pengajuanTerakhir->status == 'draft') {
                     $pengajuanTerakhir->update(['jenis_produk' => $request->jenis_produk]);
@@ -271,8 +255,7 @@ class NasabahController extends Controller
 
             });
 
-            // LOGIKA REDIRECT DINAMIS
-            $prefix = strtolower($request->user()->role); // 'admin' atau 'funding'
+            $prefix = strtolower($request->user()->role);
 
             return redirect()->route($prefix . '.nasabah.index')->with('success', 'Data nasabah berhasil diperbarui!');
 
@@ -285,7 +268,6 @@ class NasabahController extends Controller
     {
         $nasabah = Nasabah::findOrFail($id);
         
-        // Hapus file fisik
         if ($nasabah->foto_ktp && Storage::disk('public')->exists($nasabah->foto_ktp)) {
             Storage::disk('public')->delete($nasabah->foto_ktp);
         }
@@ -293,7 +275,6 @@ class NasabahController extends Controller
             Storage::disk('public')->delete($nasabah->foto_npwp);
         }
 
-        // Hapus User (Otomatis cascade hapus nasabah jika setting DB benar)
         $nasabah->user->delete(); 
         
         return redirect()->back()->with('success', 'Data nasabah telah dihapus.');
@@ -313,7 +294,14 @@ class NasabahController extends Controller
         try {
             Excel::import(new NasabahImport, $request->file('file_excel'));
             
-            return redirect()->back()->with('success', 'Data nasabah berhasil diimport!');
+            return redirect()->back()->with('success', 'Data nasabah berhasil diimport/diperbarui!');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMsg = "Gagal Import pada baris: ";
+            foreach ($failures as $failure) {
+                $errorMsg .= $failure->row() . " (" . implode(', ', $failure->errors()) . "); ";
+            }
+            return redirect()->back()->with('error', $errorMsg);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal import: ' . $e->getMessage());
         }
