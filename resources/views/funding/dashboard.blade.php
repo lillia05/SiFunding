@@ -112,11 +112,28 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $item->jenis_produk }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->created_at->diffForHumans() }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                {{ $item->status == 'done' ? 'bg-teal-100 text-teal-700' : 'bg-yellow-100 text-yellow-700' }}">
-                                {{ strtoupper($item->status) }}
+                        @if($item->status == 'draft')
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-500">
+                                Menunggu Verifikasi
                             </span>
-                        </td>
+                        @elseif($item->status == 'process')
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-700">
+                                Menunggu Cetak
+                            </span>
+                        @elseif($item->status == 'ready')
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-700">
+                                Siap Diserahkan
+                            </span>
+                        @elseif($item->status == 'done')
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-teal-100 text-teal-700">
+                                Selesai
+                            </span>
+                        @else
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-500">
+                                {{ $item->status }}
+                            </span>
+                        @endif
+                    </td>
                     </tr>
                     @empty
                     <tr>
