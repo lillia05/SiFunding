@@ -140,8 +140,8 @@
 
         <div class="hidden lg:block relative w-0 flex-1 bg-bsi-teal">
             <img class="absolute inset-0 h-full w-full object-cover opacity-50" 
-                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-                alt="Meeting Background">
+                src="{{ asset('img/gedung.png') }}"" 
+                alt="Background">
             
             <div class="absolute inset-0 bg-gradient-to-t from-bsi-teal via-transparent to-transparent opacity-90"></div>
             

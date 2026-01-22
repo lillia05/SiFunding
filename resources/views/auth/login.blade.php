@@ -135,7 +135,7 @@
 
         <div class="hidden lg:block relative w-0 flex-1 bg-gray-900">
             <img class="absolute inset-0 h-full w-full object-cover opacity-60" 
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                src="{{ asset('img/gedung.png') }}" 
                 alt="Office Background">
             
             <div class="absolute inset-0 bg-gradient-to-br from-bsi-teal to-gray-900 opacity-80 mix-blend-multiply"></div>
