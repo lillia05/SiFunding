@@ -298,7 +298,7 @@
                         <div class="sticky top-24">
                             <button type="submit" class="w-full bg-bsi-teal text-white font-bold py-4 rounded-xl shadow-lg hover:bg-teal-700 transition transform flex justify-center items-center group">
                                 <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Simpan Data & Buat Akun
+                                Simpan Data
                             </button>
                             <p class="text-xs text-center text-gray-400 mt-2">Password akun akan otomatis diset: 12345678</p>
                         </div>
