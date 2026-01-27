@@ -1,6 +1,15 @@
-<aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-10 min-h-screen">
-    <div class="h-20 flex items-center px-6 border-b border-gray-100">
+<aside 
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out transform 
+           flex flex-col min-h-screen 
+           md:translate-x-0 md:static md:inset-0">
+               
+    <div class="h-20 flex items-center px-6 border-b border-gray-100 justify-between">
         <img class="h-10 w-auto" src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia.svg" alt="Logo BSI">
+        
+        <button @click="sidebarOpen = false" class="md:hidden text-gray-500 hover:text-red-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
@@ -24,8 +33,7 @@
             $isUsersActive     = request()->routeIs('admin.users.*');
         @endphp
 
-
-        {{-- 1. DASHBOARD (Dinamis) --}}
+        {{-- 1. DASHBOARD --}}
         <a href="{{ $dashboardRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all 
            {{ $isDashboardActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal shadow-sm border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
@@ -33,7 +41,7 @@
             Dashboard
         </a>
 
-        {{-- 2. MANAJEMEN AKUN (Hanya Tampil Jika Admin) --}}
+        {{-- 2. MANAJEMEN AKUN --}}
         @if($isAdmin)
             <a href="{{ route('admin.users.index') }}" 
                class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
@@ -43,7 +51,7 @@
             </a>
         @endif
         
-        {{-- 3. DATA NASABAH (Dinamis) --}}
+        {{-- 3. DATA NASABAH --}}
         <a href="{{ $nasabahRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
            {{ $isNasabahActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
@@ -51,7 +59,7 @@
             Data Nasabah
         </a>
 
-        {{-- 4. DISTRIBUSI TABUNGAN (Dinamis) --}}
+        {{-- 4. DISTRIBUSI TABUNGAN --}}
         <a href="{{ $trackingRoute }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
            {{ $isTrackingActive ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
@@ -61,7 +69,7 @@
 
         <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">Pengaturan</p>
 
-        {{-- 5. PROFIL (Umum) --}}
+        {{-- 5. PROFIL --}}
         <a href="{{ route('profile.edit') }}" 
            class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors
            {{ request()->routeIs('profile.*') ? 'bg-gradient-to-r from-teal-50 to-white text-bsi-teal border-l-4 border-bsi-teal' : 'text-gray-600 hover:bg-gray-50 hover:text-bsi-teal' }}">
@@ -75,7 +83,6 @@
     <div class="border-t border-gray-100 p-4 bg-gray-50">
         <div class="flex items-center">
             
-            {{-- AVATAR: Menggunakan inisial nama jika tidak ada foto --}}
             <div class="flex-shrink-0">
                 @if($user->avatar && file_exists(storage_path('app/public/' . $user->avatar)))
                     <img src="{{ asset('storage/' . $user->avatar) }}" 
