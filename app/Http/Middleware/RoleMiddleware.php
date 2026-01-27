@@ -8,18 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Cek user sudah login dan memiliki role yang diizinkan
         if (!$request->user() || !in_array($request->user()->role, $roles)) {
             abort(403, 'Unit kerja Anda tidak memiliki izin untuk akses halaman ini.');
         }
-
         return $next($request);
     }
 }
